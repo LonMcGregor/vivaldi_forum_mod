@@ -90,5 +90,13 @@
     "reset": {
         "message": "Reset",
         "description": "Text to show on a button that performs some sort of reset operation"
+    },
+    "nativeNotifications": {
+        "message": "Native Notifications",
+        "description": "Title of the native notifications mod as shown in options"
+    },
+    "nativeNotificationsDesc": {
+        "message": "Uses the HTML5 notifications api to show alerts on your desktop, so you can get notifications even if the forum tab isn't selected",
+        "description": "Description of the native notifications mod as shown in options"
     }
 }

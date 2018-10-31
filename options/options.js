@@ -19,6 +19,7 @@ var userIDS = document.getElementById('userID');
 var signatureModS = document.getElementById('signatureMod');
 var squareS = document.getElementById('square');
 var advancedFormattingS = document.getElementById('advancedFormatting');
+var nativeNotificationsS = document.getElementById('nativeNotifications');
 
 function save_options(){
 
@@ -112,6 +113,11 @@ function save_options(){
     } else {
         advancedFormattingS.value = 0;
     }
+    if (nativeNotificationsS.checked == true) {
+        nativeNotificationsS.value = 1;
+    } else {
+        nativeNotificationsS.value = 0;
+    }
 
     var standard = standardS.value;
     var darkGrey = darkGreyS.value;
@@ -132,6 +138,7 @@ function save_options(){
     var signatureMod = signatureModS.value;
     var square = squareS.value;
     var advancedFormatting = advancedFormattingS.value;
+    var nativeNotifications = nativeNotificationsS.value;
 
     chrome.storage.sync.set({
         'standard': standard,
@@ -151,7 +158,8 @@ function save_options(){
         'userID': userID,
         'signatureMod': signatureMod,
         'square': square,
-        'advancedFormatting': advancedFormatting
+        'advancedFormatting': advancedFormatting,
+        'nativeNotifications': nativeNotifications
       },
       function(){
           chrome.storage.local.set({'userCSS': userCSS});
@@ -194,7 +202,8 @@ function restore_options(){
         'userID': '',
         'signatureMod': '',
         'square': '',
-        'advancedFormatting': ''
+        'advancedFormatting': '',
+        'nativeNotifications': ''
       },
     function(restore){
         chrome.storage.local.get({'userCSS': ''}, function(local) {
@@ -296,6 +305,12 @@ function restore_options(){
             advancedFormattingS.checked = true;
         } else {
             advancedFormattingS.checked = false;
+        }
+        nativeNotificationsS.value = restore.nativeNotifications;
+        if (nativeNotificationsS.value == 1) {
+            nativeNotificationsS.checked = true;
+        } else {
+            nativeNotificationsS.checked = false;
         }
     });
 };
@@ -430,6 +445,8 @@ function show_changelog() {
 function updateLocalisations(){
     document.querySelectorAll(".advancedFormatting").forEach(span => {span.innerText = chrome.i18n.getMessage("advancedFormatting");});
     document.querySelector(".advancedFormattingDesc").innerText = chrome.i18n.getMessage("advancedFormattingDesc");
+    document.querySelectorAll(".nativeNotifications").forEach(span => {span.innerText = chrome.i18n.getMessage("nativeNotifications");});
+    document.querySelector(".nativeNotificationsDesc").innerText = chrome.i18n.getMessage("nativeNotificationsDesc");
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
