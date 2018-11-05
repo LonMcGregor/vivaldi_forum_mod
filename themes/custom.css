@@ -644,15 +644,6 @@ button.main.green, button.main.red {
 .dropmarker:before {
     border-color: var(--colorLi2);
 }
-.composer .hiddenButtons .trigger {
-    background: var(--colorHi);
-    border-color: var(--colorHi);
-}
-.composer .hiddenButtons .trigger i {
-    color: var(--colorHiFg);
-}
-@media (max-width: 991px){
-    .composer .hiddenButtons .trigger {
-        background: var(--colorBtnHi);
-    }
+#toolbar-custom ul li:hover {
+    background-color: var(--colorBgHiC);
 }
