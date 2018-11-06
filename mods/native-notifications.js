@@ -9,8 +9,9 @@ function checkPermission(){
     }
 }
 
-const ALERT_OBSERVER = new MutationObserver(alertChanged);
-const OBSERVER_CONFIG = {childList: true};
+const OBSERVER = new MutationObserver(onMutate);
+const UNREAD_CONFIG = {attributes: true, attributeFilter: ["data-content"]};
+let NOTIF_LIST, CHAT_LIST;
 
 /**
  * Handle the response from the background script indicating
@@ -29,42 +30,60 @@ function responseFromBackground(response) {
 }
 
 /**
- * Do something with a mutation
- * Alert Types from class:
- *  * alert-danger - bad permissions
- *  * alert-warning - connection was lost (don't notify)
- *  * alert-success - "options saved", "marked as unread" (don't notify)
- *  * alert-info - "new reply", "upvote" (notify)
- * @param {MutationRecord} mutation
+ * Simulate opening and closing the list so it loads the notifications
+ * @param {DOMElement} button to simulate open/close with
  */
-function handleMutation(mutation){
-    console.log("Alert!", mutation);
-    const alertBox = mutation.addedNodes[0];
-    if(alertBox.classList.contains("alert-success") || alertBox.classList.contains("alert-warning") || alertBox.classList.contains("alert-danger")){
-        console.log("Pointless alert", mutation);
-        return;
-    }
-    let notifyText = alertBox.querySelector("p").innerText;
-    notifyText = notifyText.trim();
-    if(!notifyText){
-        console.warn("Couldn't read alert", mutation, notifyText);
-        return;
-    }
-    chrome.runtime.sendMessage({verb: "Notify", content: notifyText}, responseFromBackground);
+function simulateOpenClose(button){
+    button.click();
+    button.click();
 }
 
 /**
- * The alert box changed
- * Only do something if an alert node was added
+ * One of the unread count badges has changed
+ * @param {DOMElement} target that changed
+ */
+function newUnreadData(target){
+    console.log("New unread", target);
+    const parent = target.parentElement;
+    const list = parent.id==="chat_dropdown" ? CHAT_LIST : NOTIF_LIST;
+    const latest = list.children[0];
+    if(!latest.classList.contains("unread")){
+        console.warn("Tried to read a notification that was already read / notifications haven't loaded yet", latest);
+        return;
+    }
+    console.log("latest unread", latest);
+    let latestText = latest.innerText.replace(/[\t\n\r]/g, "");
+    chrome.runtime.sendMessage({verb: "Notify", content: latestText}, responseFromBackground);
+}
+
+/**
+ * Something being observed (an unread badge) mutated
  * @param {MutationRecord[]} mutations
  */
-function alertChanged(mutations){
+function onMutate(mutations){
     console.log("Mutations hapenned.", mutations);
     mutations.forEach(mutation => {
-        if(mutation.type === "childList" && mutation.addedNodes.length > 0){
-            handleMutation(mutation);
+        if (mutation.type==="attributes" && mutation.target.classList.contains("unread-count")){
+            newUnreadData(mutation.target);
         }
     });
+}
+
+/**
+ * Start observing the unread counts for notification lists
+ */
+function observeNotifications(){
+    const unreadNotificationCount = document.querySelector("#notif_dropdown > i");
+    const unreadChatCount = document.querySelector("#chat_dropdown > i");
+    if(unreadNotificationCount && unreadChatCount){
+        simulateOpenClose(unreadNotificationCount.parentElement);
+        simulateOpenClose(unreadChatCount.parentElement);
+        OBSERVER.observe(unreadNotificationCount, UNREAD_CONFIG);
+        OBSERVER.observe(unreadChatCount, UNREAD_CONFIG);
+    } else {
+        console.warn("failed to find unread counter");
+        setTimeout(observeNotifications, 500);
+    }
 }
 
 /**
@@ -75,7 +94,6 @@ chrome.storage.sync.get({
 }, settings => {
     if(settings.nativeNotifications==="1"){
         checkPermission();
-        const alertbox = document.querySelector(".alert-window");
-        ALERT_OBSERVER.observe(alertbox, OBSERVER_CONFIG);
+        observeNotifications();
     }
 });
