@@ -11,7 +11,8 @@ chrome.storage.sync.get({
     'userID': '',
     'signatureMod' : '',
     'square': '',
-    'advancedFormatting': ''
+    'advancedFormatting': '',
+    'nativeNotifications': ''
 },
 function(mods) {
     var headerScroll = mods.headerScroll;
@@ -25,6 +26,7 @@ function(mods) {
     var signatureMod = mods.signatureMod;
     var square = mods.square;
     var advancedFormatting = mods.advancedFormatting;
+    var nativeNotifications = mods.nativeNotifications;
 
     if (headerScroll == 1) {
         var MheaderScroll = document.createElement('script');
@@ -91,6 +93,11 @@ function(mods) {
         advancedFormattingStyle.type = 'text/css';
         advancedFormattingStyle.rel = 'stylesheet';
         document.getElementsByTagName('head')[0].appendChild(advancedFormattingStyle);
+    }
+    if (nativeNotifications == 1){
+        var notificationScript = document.createElement('script');
+        notificationScript.src = chrome.extension.getURL('mods/native-notifications-wsmock.js');
+        document.getElementsByTagName('body')[0].appendChild(notificationScript);
     }
 
     add_copy_code();

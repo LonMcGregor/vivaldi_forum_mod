@@ -11,16 +11,17 @@ function onNativeNotificationMessage(message, sendResponse){
     /* Race */
     if(RECENT_NOTIFICATION_SET.has(notifyText)){
         console.warn("Duplicate Notification", notifyText);
-        sendResponse({verb: "DontSendNotify"});
+        message.verb = "DontSendNotify";
     } else {
         console.log("New Notification", notifyText);
+        message.verb = "SendNotify";
         RECENT_NOTIFICATION_SET.add(notifyText);
-        sendResponse({verb: "SendNotify", content: notifyText});
         setTimeout(() => {
             console.log("Cleared", notifyText);
             RECENT_NOTIFICATION_SET.delete(notifyText);
         }, RECENT_TIME_MS);
     }
+    sendResponse(message);
     /* Race end */
 }
 

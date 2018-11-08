@@ -43,7 +43,8 @@
         "mods/signature-mod.css",
         "mods/square-avatars.css",
         "mods/advanced-formatting.js",
-        "mods/advanced-formatting.css"
+        "mods/advanced-formatting.css",
+        "mods/native-notifications-wsmock.js"
     ],
     "content_scripts": [
     {

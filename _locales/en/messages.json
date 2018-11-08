@@ -98,5 +98,13 @@
     "nativeNotificationsDesc": {
         "message": "Uses the HTML5 notifications api to show alerts on your desktop, so you can get notifications even if the forum tab isn't selected",
         "description": "Description of the native notifications mod as shown in options"
+    },
+    "notificationTitle": {
+        "message": "Vivaldi Forum Notification",
+        "description": "Title for a native notification mirroring a forum notification"
+    },
+    "notificationChatTitle": {
+        "message": "Vivaldi Forum Chat from %1",
+        "description": "Title for a native notification mirroring a new chat message, %1 will be replaced with username"
     }
 }
