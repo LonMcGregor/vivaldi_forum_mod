@@ -11,6 +11,11 @@
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     },
+    "applications": {
+        "gecko": {
+            "id": "vivaldi-forum-mod@luetage.vivaldi.net"
+        }
+    },
     "permissions": [
         "storage",
         "downloads"
