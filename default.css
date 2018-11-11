@@ -3,10 +3,7 @@
 /* Profile alignment fix */
 .account .cover .avatar-wrapper {
     margin-left: -68px !important;
-}
-.account, .groups.details {
-    margin-top: 200px !important;
-}
+}y
 
 /* Font icons */
 .taskbar-composer .fa-plus:before {
@@ -23,9 +20,6 @@ i.fa-ellipsis-v:before {
 }
 .fa-angle-up:before {
     content: "\f0d8" !important;
-}
-#optionsLink .fa-cog:before {
-     content: "\f192";
 }
 
 /* Expanded chat controls margin fix */
@@ -125,6 +119,12 @@ button[type^="submit"].btn-primary, .btn-default#save-preferences {
     color: #fff;
 }
 
+/* Disable line breaks for composer title */
+.composer .title-container .title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 
 /* Copy all code button */
 .copy-all-code-button {
@@ -144,4 +144,12 @@ button[type^="submit"].btn-primary, .btn-default#save-preferences {
 .copy-all-code-button:hover {
     opacity: 1;
     color: #f4ff9d;
+}
+
+/*
+Option to dismiss notification
+The notification is shown by default.js, if not dismissed previously.
+*/
+.footer-notification {
+    display: none !important;
 }
