@@ -11,7 +11,7 @@
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     },
-    "applications": {
+    "browser_specific_settings": {
         "gecko": {
             "id": "vivaldi-forum-mod@luetage.vivaldi.net"
         }
@@ -47,7 +47,6 @@
         "mods/userID.css",
         "mods/signature-mod.css",
         "mods/square-avatars.css",
-        "mods/advanced-formatting.js",
         "mods/advanced-formatting.css"
     ],
     "content_scripts": [

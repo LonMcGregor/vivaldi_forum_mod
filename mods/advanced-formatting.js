@@ -149,6 +149,11 @@ const EMOTE_MODAL = "emote-picker";
 const TOOLBAR_MODAL = "toolbar-custom";
 /* use a nonce to prevent accidental dnd of text */
 const NONCE = get_random();
+/* Enum for touch based dragging */
+const LONG_PRESS = 2;
+const DRAGGING = 1;
+const FINISHED = 0;
+let TOUCH_STATE = FINISHED;
 
 /**
  * Generate random number
@@ -684,6 +689,7 @@ function formatButtonDragEnd(dragEvent){
 /**
  * Go through each of the formatting buttons and make it draggable
  * Add the dragstart and dragend listeners
+ * Also, add touch listeners for mobile
  */
 function makeFormatButtonsDraggable(){
     for (const key in FORMATTING_BUTTONS) {
@@ -693,18 +699,83 @@ function makeFormatButtonsDraggable(){
             button.addEventListener("dragstart", formatButtonDragStart);
             button.addEventListener("dragend", formatButtonDragEnd);
             button.addEventListener("drag", buttonDraggedOverAnother);
+            button.addEventListener("touchstart", buttonTouchStart);
+            button.addEventListener("touchend", buttonTouchEnd);
+            button.addEventListener("touchmove", buttonTouchMoved);
         }
     }
 }
 
-/**
- * The button was dragged over another button
- * @param {DragEvent} dragEvent
- */
-function buttonDraggedOverAnother(dragEvent){
-    const x = dragEvent.clientX;
-    const y = dragEvent.clientY;
-    /* Dragged over another button */
+function buttonTouchStart(touchEvent){
+    touchEvent.preventDefault();
+    TOUCH_STATE = LONG_PRESS;
+    setTimeout(() => {
+        if(TOUCH_STATE!==FINISHED){
+            TOUCH_STATE = DRAGGING;
+            navigator.vibrate(20);
+            console.log("Dragging started");
+        } else {
+            console.log("Dragging finished before long press check");
+        }
+    }, 1000);
+    console.log("Touch Start. Awaiting long press", touchEvent);
+}
+
+function buttonTouchEnd(touchEvent){
+    touchEvent.preventDefault();
+    console.log("Touch End", touchEvent);
+    if(TOUCH_STATE===FINISHED){
+        return;
+    }
+    TOUCH_STATE = FINISHED;
+    hideDropMarker();
+
+    const x = touchEvent.changedTouches[0].clientX;
+    const y = touchEvent.changedTouches[0].clientY;
+    const elementBelowDrag = getButtonAtPosition(x, y);
+
+    if(!elementBelowDrag){
+        return;
+    }
+    if(elementBelowDrag.id===TOOLBAR_MODAL){
+        console.log("hide", touchEvent.target);
+    } else {
+        console.log("move to", elementBelowDrag.order);
+    }
+}
+
+function buttonTouchMoved(touchEvent){
+    touchEvent.preventDefault();
+    console.log("Touch Move", touchEvent);
+    const x = touchEvent.touches[0].clientX;
+    const y = touchEvent.touches[0].clientY;
+    const elementBelowDrag = getButtonAtPosition(x, y);
+    if(!elementBelowDrag || elementBelowDrag.id===TOOLBAR_MODAL){
+        hideDropMarker();
+    } else {
+        const box = elementBelowDrag.getClientRects()[0];
+        if(!box){
+            hideDropMarker();
+        }
+        const right = box.x+box.width;
+        const top = box.y;
+        moveDropMarker(right, top);
+        showDropMarker();
+    }
+}
+
+function getButtonAtPosition(x, y){
+    const toolbarModal = document.getElementById(TOOLBAR_MODAL);
+    const toolbarModalBox = toolbarModal.getClientRects()[0];
+    if(toolbarModalBox){
+        const modalLeft = toolbarModalBox.x;
+        const modalRight = toolbarModalBox.x+toolbarModalBox.width;
+        const modalTop = toolbarModalBox.y;
+        const modalBottom = toolbarModalBox.y+toolbarModalBox.height;
+        if(modalLeft <= x && x <= modalRight && modalTop <= y && y <= modalBottom){
+            return toolbarModal;
+        }
+    }
     for (const key in FORMATTING_BUTTONS) {
         if (FORMATTING_BUTTONS.hasOwnProperty(key)) {
             const element = FORMATTING_BUTTONS[key];
@@ -717,17 +788,10 @@ function buttonDraggedOverAnother(dragEvent){
             const top = box.y;
             const bottom = box.y+box.height;
             if(left <= x && x <= right && top <= y && y <= bottom){
-                if(Number(FORMATTING_BAR_CUSTOM_ORDER[key])===-1){
-                    hideDropMarker();
-                } else {
-                    moveDropMarker(right, top);
-                    showDropMarker();
-                }
-                return;
+                return element;
             }
         }
     }
-    /* Dragged over leftmost button */
     const leftElement = document.querySelector("li.hiddenButtons");
     const leftBox = leftElement.getClientRects()[0];
     if(leftBox){
@@ -736,13 +800,32 @@ function buttonDraggedOverAnother(dragEvent){
         const leftTop = leftBox.y;
         const leftBottom = leftBox.y+leftBox.height;
         if(leftLeft <= x && x <= leftRight && leftTop <= y && y <= leftBottom){
-            moveDropMarker(leftRight, leftTop);
-            showDropMarker();
-            return;
+            return leftElement;
         }
     }
-    /* Not dragged over anything important */
-    hideDropMarker();
+    return null;
+}
+
+/**
+ * The button was dragged over another button
+ * @param {DragEvent} dragEvent
+ */
+function buttonDraggedOverAnother(dragEvent){
+    const x = dragEvent.clientX;
+    const y = dragEvent.clientY;
+    const elementBelowDrag = getButtonAtPosition(x, y);
+    if(!elementBelowDrag || elementBelowDrag.id===TOOLBAR_MODAL){
+        hideDropMarker();
+    } else {
+        const box = elementBelowDrag.getClientRects()[0];
+        if(!box){
+            hideDropMarker();
+        }
+        const right = box.x+box.width;
+        const top = box.y;
+        moveDropMarker(right, top);
+        showDropMarker();
+    }
 }
 
 /**
@@ -800,6 +883,10 @@ function buttonDroppedOn(dropEvent){
     saveToolbarOrder();
     setOrderAndHideAccordingToRemembered();
     dropEvent.preventDefault();
+}
+
+function moveButton(originalElement, targetPosition){
+
 }
 
 /**
