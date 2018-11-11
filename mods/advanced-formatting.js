@@ -541,19 +541,7 @@ function buttonDroppedOnToModal(dropEvent){
         hideDropMarker();
         return;
     }
-    const orderOfDropped = Number(data.order);
-    const keyOfDropped = data.key;
-    for (const key in FORMATTING_BAR_CUSTOM_ORDER) {
-        if (FORMATTING_BAR_CUSTOM_ORDER.hasOwnProperty(key)) {
-            const order = Number(FORMATTING_BAR_CUSTOM_ORDER[key]);
-            if(order > orderOfDropped){
-                FORMATTING_BAR_CUSTOM_ORDER[key] = order - 1;
-            }
-        }
-    }
-    FORMATTING_BAR_CUSTOM_ORDER[keyOfDropped] = -1;
-    saveToolbarOrder();
-    setOrderAndHideAccordingToRemembered();
+    moveButton(data.key, Number(data.order), -1);
     dropEvent.preventDefault();
 }
 
@@ -706,14 +694,18 @@ function makeFormatButtonsDraggable(){
     }
 }
 
+/**
+ * Touch started
+ * @param {TouchEvent} touchEvent
+ */
 function buttonTouchStart(touchEvent){
-    touchEvent.preventDefault();
     TOUCH_STATE = LONG_PRESS;
     setTimeout(() => {
         if(TOUCH_STATE!==FINISHED){
             TOUCH_STATE = DRAGGING;
-            navigator.vibrate(20);
             console.log("Dragging started");
+            navigator.vibrate(20);
+            showModal(touchEvent.touches[0], TOOLBAR_MODAL);
         } else {
             console.log("Dragging finished before long press check");
         }
@@ -721,32 +713,48 @@ function buttonTouchStart(touchEvent){
     console.log("Touch Start. Awaiting long press", touchEvent);
 }
 
+/**
+ * Touch ended
+ * @param {TouchEvent} touchEvent
+ */
 function buttonTouchEnd(touchEvent){
-    touchEvent.preventDefault();
     console.log("Touch End", touchEvent);
+    hideDropMarker();
+    const x = touchEvent.changedTouches[0].clientX;
+    const y = touchEvent.changedTouches[0].clientY;
+    const elementBelowDrag = getButtonAtPosition(x, y);
+    hideModal(TOOLBAR_MODAL);
+    let target = touchEvent.target;
+    if(target.tagName.toUpperCase()==="I"){
+        target = target.parentElement;
+    }
     if(TOUCH_STATE===FINISHED){
         return;
     }
     TOUCH_STATE = FINISHED;
-    hideDropMarker();
-
-    const x = touchEvent.changedTouches[0].clientX;
-    const y = touchEvent.changedTouches[0].clientY;
-    const elementBelowDrag = getButtonAtPosition(x, y);
-
     if(!elementBelowDrag){
         return;
     }
     if(elementBelowDrag.id===TOOLBAR_MODAL){
-        console.log("hide", touchEvent.target);
+        moveButton(target.getAttribute("data-format"), target.style.order, -1);
     } else {
-        console.log("move to", elementBelowDrag.order);
+        moveButton(target.getAttribute("data-format"), target.style.order, elementBelowDrag.style.order);
     }
 }
 
+/**
+ * Touch was moved
+ * @param {TouchEvent} touchEvent
+ */
 function buttonTouchMoved(touchEvent){
-    touchEvent.preventDefault();
-    console.log("Touch Move", touchEvent);
+    if(TOUCH_STATE===LONG_PRESS){
+        console.log("dragged too early");
+        TOUCH_STATE = FINISHED;
+    }
+    if(TOUCH_STATE!==DRAGGING){
+        console.log("moved without being in dragging state");
+        return;
+    }
     const x = touchEvent.touches[0].clientX;
     const y = touchEvent.touches[0].clientY;
     const elementBelowDrag = getButtonAtPosition(x, y);
@@ -764,6 +772,12 @@ function buttonTouchMoved(touchEvent){
     }
 }
 
+/**
+ * Get the button or modal at the specified x,y position
+ * Null if there is no expected item at that point
+ * @param {Number} x client horizontal position
+ * @param {Number} y client vertical position
+ */
 function getButtonAtPosition(x, y){
     const toolbarModal = document.getElementById(TOOLBAR_MODAL);
     const toolbarModalBox = toolbarModal.getClientRects()[0];
@@ -846,10 +860,28 @@ function buttonDroppedOn(dropEvent){
         target = target.parentElement;
     }
     const targetOrder = Number(target.style.order);
+    moveButton(data.key, data.order, targetOrder);
+    dropEvent.preventDefault();
+}
+
+/**
+ * A button was moved onto something else
+ * @param {string} originalKey that was being moved
+ * @param {Number} originalOrder of the thing being moved
+ * @param {Number} targetOrder of item dropped on
+ */
+function moveButton(originalKey, originalOrder, targetOrder){
     if(targetOrder === -1){ // dragged from toolbar to modal
-        return;
-    }
-    if(data.order===-1){ // dragged from modal to toolbar
+        for (const key in FORMATTING_BAR_CUSTOM_ORDER) {
+            if (FORMATTING_BAR_CUSTOM_ORDER.hasOwnProperty(key)) {
+                const order = Number(FORMATTING_BAR_CUSTOM_ORDER[key]);
+                if(order > originalOrder){
+                    FORMATTING_BAR_CUSTOM_ORDER[key] = order - 1;
+                }
+            }
+        }
+        FORMATTING_BAR_CUSTOM_ORDER[originalKey] = -1;
+    } else if(originalOrder===-1){ // dragged from modal to toolbar
         for (const key in FORMATTING_BAR_CUSTOM_ORDER) {
             if (FORMATTING_BAR_CUSTOM_ORDER.hasOwnProperty(key)) {
                 const order = Number(FORMATTING_BAR_CUSTOM_ORDER[key]);
@@ -858,35 +890,30 @@ function buttonDroppedOn(dropEvent){
                 }
             }
         }
-        FORMATTING_BAR_CUSTOM_ORDER[data.key] = targetOrder + 1;
-    } else if(targetOrder > data.order) { // moved to the right
+        FORMATTING_BAR_CUSTOM_ORDER[originalKey] = targetOrder + 1;
+    } else if(targetOrder > originalOrder) { // moved to the right
         for (const key in FORMATTING_BAR_CUSTOM_ORDER) {
             if (FORMATTING_BAR_CUSTOM_ORDER.hasOwnProperty(key)) {
                 const order = Number(FORMATTING_BAR_CUSTOM_ORDER[key]);
-                if(order > data.order && order <= targetOrder){
+                if(order > originalOrder && order <= targetOrder){
                     FORMATTING_BAR_CUSTOM_ORDER[key] = order - 1;
                 }
             }
         }
-        FORMATTING_BAR_CUSTOM_ORDER[data.key] = targetOrder;
-    } else if (targetOrder < data.order) { // moved to the left
+        FORMATTING_BAR_CUSTOM_ORDER[originalKey] = targetOrder;
+    } else if (targetOrder < originalOrder) { // moved to the left
         for (const key in FORMATTING_BAR_CUSTOM_ORDER) {
             if (FORMATTING_BAR_CUSTOM_ORDER.hasOwnProperty(key)) {
                 const order = Number(FORMATTING_BAR_CUSTOM_ORDER[key]);
-                if(order > targetOrder && order <= data.order){
+                if(order > targetOrder && order <= originalOrder){
                     FORMATTING_BAR_CUSTOM_ORDER[key] = order + 1;
                 }
             }
         }
-        FORMATTING_BAR_CUSTOM_ORDER[data.key] = targetOrder + 1;
+        FORMATTING_BAR_CUSTOM_ORDER[originalKey] = targetOrder + 1;
     } // else dropped on to self, so dont do anything
     saveToolbarOrder();
     setOrderAndHideAccordingToRemembered();
-    dropEvent.preventDefault();
-}
-
-function moveButton(originalElement, targetPosition){
-
 }
 
 /**
