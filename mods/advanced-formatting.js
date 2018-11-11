@@ -703,14 +703,10 @@ function buttonTouchStart(touchEvent){
     setTimeout(() => {
         if(TOUCH_STATE!==FINISHED){
             TOUCH_STATE = DRAGGING;
-            console.log("Dragging started");
             navigator.vibrate(20);
             showModal(touchEvent.touches[0], TOOLBAR_MODAL);
-        } else {
-            console.log("Dragging finished before long press check");
         }
     }, 1000);
-    console.log("Touch Start. Awaiting long press", touchEvent);
 }
 
 /**
@@ -718,7 +714,6 @@ function buttonTouchStart(touchEvent){
  * @param {TouchEvent} touchEvent
  */
 function buttonTouchEnd(touchEvent){
-    console.log("Touch End", touchEvent);
     hideDropMarker();
     const x = touchEvent.changedTouches[0].clientX;
     const y = touchEvent.changedTouches[0].clientY;
@@ -728,7 +723,8 @@ function buttonTouchEnd(touchEvent){
     if(target.tagName.toUpperCase()==="I"){
         target = target.parentElement;
     }
-    if(TOUCH_STATE===FINISHED){
+    if(TOUCH_STATE!==DRAGGING){
+        TOUCH_STATE = FINISHED;
         return;
     }
     TOUCH_STATE = FINISHED;
@@ -736,9 +732,9 @@ function buttonTouchEnd(touchEvent){
         return;
     }
     if(elementBelowDrag.id===TOOLBAR_MODAL){
-        moveButton(target.getAttribute("data-format"), target.style.order, -1);
+        moveButton(target.getAttribute("data-format"), Number(target.style.order), -1);
     } else {
-        moveButton(target.getAttribute("data-format"), target.style.order, elementBelowDrag.style.order);
+        moveButton(target.getAttribute("data-format"), Number(target.style.order), Number(elementBelowDrag.style.order));
     }
 }
 
@@ -748,11 +744,9 @@ function buttonTouchEnd(touchEvent){
  */
 function buttonTouchMoved(touchEvent){
     if(TOUCH_STATE===LONG_PRESS){
-        console.log("dragged too early");
         TOUCH_STATE = FINISHED;
     }
     if(TOUCH_STATE!==DRAGGING){
-        console.log("moved without being in dragging state");
         return;
     }
     const x = touchEvent.touches[0].clientX;
