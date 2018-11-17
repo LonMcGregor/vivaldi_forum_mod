@@ -10,6 +10,8 @@ function bookmarked() {
     if (favourites) {
         var favcheck = favourites.innerHTML;
         if (favcheck === 'favourites') {
+            var edit = document.querySelector('.btn-group.account-fab .dropdown-menu.dropdown-menu-right li:nth-of-type(3) a');
+            edit.innerHTML = chrome.i18n.getMessage('editCommunity');
             favourites.innerHTML = chrome.i18n.getMessage('bookmarked');
             favourites.href = '/user/' + username() + '/bookmarks';
         }
@@ -17,7 +19,7 @@ function bookmarked() {
 };
 
 
-/* Links to options and hidden edit page  */
+/* Links to options and hidden edit page */
 
 function userMenu() {
     if (document.getElementById('optionsLink') === null) {
@@ -101,7 +103,7 @@ function dismiss() {
 
 function showNotification() {
     notif.style = 'display: block !important';
-    const content = document.querySelector('.footer-notification .notification');
+    const content = document.querySelector('.shadow-box3 .notification');
     const dis = document.createElement('a');
     dis.style.cursor = 'pointer';
     dis.innerHTML = ' ' + chrome.i18n.getMessage('dismiss');
@@ -110,9 +112,9 @@ function showNotification() {
 };
 
 function notificationCheck() {
-    notif = document.querySelector('.footer-notification');
+    notif = document.querySelector('.shadow-box3');
     if (notif) {
-        notifNew = document.querySelector('.footer-notification .notification').textContent;
+        notifNew = document.querySelector('.shadow-box3 .notification').textContent;
         chrome.storage.sync.get({
             'notifState': 'on',
             'notifOld': ''

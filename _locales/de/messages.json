@@ -1,22 +1,22 @@
 {
     "bookmarks": {
-        "message": "Bookmarks",
+        "message": "Lesezeichen",
         "description": "Link to bookmarks page from navigation bar"
     },
     "bookmarked": {
-        "message": "Bookmarked",
+        "message": "Lesezeichen",
         "description": "Link to bookmarks page from user profile menu"
     },
     "signature": {
-        "message": "Signature",
+        "message": "Signatur",
         "description": "Signature toggle for forum posts"
     },
     "copyCode": {
-        "message": "copy_code",
+        "message": "Code_kopieren",
         "description": "Copy all code button for code markdown"
     },
     "lastModified": {
-        "message": "Last modified",
+        "message": "Zuletzt geändert",
         "description": "Text before last edit timestamp in forum posts"
     },
     "optionsLink": {
@@ -24,35 +24,35 @@
         "description": "Link to options page in user dropdown menu. Probably no translation needed? Decide depending on language"
     },
     "editCommunity": {
-        "message": "Community profile",
+        "message": "Community Profil",
         "description": "Link to community settings in user dropdown menu"
     },
     "editForum": {
-        "message": "Forum profile",
+        "message": "Forum Profil",
         "description": "Link to forum settings in user dropdown menu"
     },
     "dismiss": {
-        "message": "Dismiss",
+        "message": "Ausblenden",
         "description": "Dismisses community notifications"
     },
     "smile_o": {
-        "message": "Emote Picker",
+        "message": "Emojis",
         "description": "Title of formatting item for emote picker"
     },
     "header": {
-        "message": "Header",
+        "message": "Überschrift",
         "description": "Title of formatting item header 1"
     },
     "window_minimize": {
-        "message": "Horizontal Rule",
+        "message": "Horizontale Linie",
         "description": "Title of formatting item horizontal rule"
     },
     "quote_right": {
-        "message": "Quote",
+        "message": "Zitat",
         "description": "Title of formatting item quote"
     },
     "code": {
-        "message": "Inline Code",
+        "message": "Inline-Code",
         "description": "Title of formatting item inline code"
     },
     "file_code_o": {
@@ -60,11 +60,11 @@
         "description": "Title of formatting item code block"
     },
     "th_large": {
-        "message": "Table",
+        "message": "Tabelle",
         "description": "Title of formatting item table"
     },
     "list_ol": {
-        "message": "Numbered List",
+        "message": "Numerierte Liste",
         "description": "Title of formatting item numbered list"
     },
     "shield": {
@@ -72,103 +72,103 @@
         "description": "Title of formatting item spoiler"
     },
     "customToolbarTitle": {
-        "message": "Edit Custom Toolbar",
+        "message": "Werkzeugleiste ändern",
         "description": "Title of custom toolbar editor"
     },
     "dragText": {
-        "message": "Click and Drag to move",
+        "message": "Klicken und ziehen um zu verschieben",
         "description": "Hover text when on a draggable area"
     },
     "advancedFormatting": {
-        "message": "Advanced Formatting",
+        "message": "Erweitertes Formatieren",
         "description": "Options: Title of advanced formatting mod"
     },
     "advancedFormattingDesc": {
-        "message": "Adds an emote picker, extra formatting buttons & allows you to drag to re-order the formatting toolbar when editing your forum posts.",
-        "description": "Options: Description of the advanced formatting mod"
+        "message": "Fügt Emojis und weitere Werkzeuge für die Bearbeitung von Beiträgen hinzu. Ermöglicht es Werkzeuge zu entfernen/hinzuzufügen und zu sortieren.",
+        "description": "Options: Description of advanced formatting mod"
     },
     "hideHeader": {
-        "message": "Auto-hide header on scroll",
+        "message": "Ausblenden des Headers beim Scrollen",
         "description": "Options: Title of auto-hide header on scroll mod"
     },
     "hideHeaderDesc": {
-        "message": "Hides the header when you scroll down, shows it when you scroll up.",
+        "message": "Nach unten scrollen verbirgt den Header, nach oben scrollen zeigt ihn wieder an.",
         "description": "Options: Description of auto-hide header on scroll mod"
     },
     "navbookmarks": {
-        "message": "Bookmarks in navigation",
+        "message": "Lesezeichen in Navigation",
         "description": "Options: Title of bookmarks in navigation mod"
     },
     "navbookmarksDesc": {
-        "message": "Displays a link to the bookmarks page in the main navigation, for easy access.",
+        "message": "Zeigt einen Link zu den Lesezeichen in der Navigationsleiste an.",
         "description": "Options: Description of bookmarks in navigation mod"
     },
     "compactHeader": {
-        "message": "Compact header",
+        "message": "Kompakter Header",
         "description": "Options: Title of compact header mod"
     },
     "compactHeaderDesc": {
-        "message": "Sets the header to its original height and removes redundant links.",
+        "message": "Setzt den Header auf die ursprüngliche Höhe und entfernt überflüssige Links.",
         "description": "Options: Description of compact header mod"
     },
     "customNotification": {
-        "message": "Custom notification icons",
+        "message": "Symbole für Benachrichtigungen",
         "description": "Options: Title of custom notification icons mod"
     },
     "customNotificationDesc": {
-        "message": "Displays additional font icons in the header's notification dropdown, to quickly distinguish one type of notification from another.",
+        "message": "Zeigt zusätzliche Symbole in der Dropdown-Liste des Headers an, um Benachrichtigungen besser voneinander zu unterscheiden.",
         "description": "Options: Description of custom notification icons mod"
     },
     "hideTooltips": {
-        "message": "Hide tooltips",
+        "message": "Tooltips deaktivieren",
         "description": "Options: Title of hide tooltips mod"
     },
     "hideTooltipsDesc": {
-        "message": "Hides header and navigation bar tooltips.",
+        "message": "Deaktiviert Tooltips im Header und in der Navigationsleiste.",
         "description": "Options: Description of hide tooltips mod"
     },
     "hideUnread": {
-        "message": "Hide unread count",
+        "message": "Anzeige ungelesener Beiträge deaktivieren",
         "description": "Options: Title of hide unread count mod"
     },
     "hideUnreadDesc": {
-        "message": "Hides the unread count icon in the navigation bar.",
+        "message": "Verbirgt die Anzahl ungelesener Beiträge in der Navigationsleiste.",
         "description": "Options: Description of unread count mod"
     },
     "timestamp": {
-        "message": "Last edit timestamp",
+        "message": "Zeitstempel der letzten Bearbeitung",
         "description": "Options: Title of last edit timestamp mod"
     },
     "timestampDesc": {
-        "message": "Displays the time of last edit in local time on bottom of edited posts.",
+        "message": "Zeigt den Zeitpunkt der letzten Bearbeitung am Ende eines Beitrags in Ortszeit an.",
         "description": "Options: Description of last edit timestamp mod"
     },
     "showUID": {
-        "message": "Show User IDs",
+        "message": "User ID anzeigen",
         "description": "Options: Title of show user IDs mod"
     },
     "showUIDDesc": {
-        "message": "Shows UIDs when hovering the username at top of a post and when hovering a user's avatar on their profile.",
+        "message": "Zeigt UIDs an, wenn man mit dem Mauszeiger über dem Nutzernamen eines Beitrags, oder über dem Nutzerbild auf einem Profil, schwebt.",
         "description": "Options: Description of show user IDs mod"
     },
     "signatureMod": {
-        "message": "Signature mod",
+        "message": "Signatur Mod",
         "description": "Options: Title of signature mod"
     },
     "signatureModDesc": {
-        "message": "Hides all signatures and replaces each with a button. When clicked, the signature of individual posts will be displayed.",
+        "message": "Verbirgt alle Signaturen und zeigt anstelle jeder einen Schalter an. Das Betätigen des Schalters (Signatur) zeigt die individuelle Signatur wieder an.",
         "description": "Options: Description of signature mod"
     },
     "squareAvatars": {
-        "message": "Square avatars",
+        "message": "Quadratische Nutzerbilder",
         "description": "Options: Title of square avatars mod"
     },
     "squareAvatarsDesc": {
-        "message": "Square avatars everywhere!",
+        "message": "Quadratische anstatt runde Nutzerbilder.",
         "description": "Options: Description of square avatars mod"
     },
     "save": {
-        "message": "Save",
+        "message": "Speichern",
         "description": "Options: Text to show on a button that performs some sort of save operation"
     },
     "backup": {
@@ -176,7 +176,7 @@
         "description": "Options: Text to show on a button that performs some sort of backup operation"
     },
     "reset": {
-        "message": "Reset",
+        "message": "Zurücksetzen",
         "description": "Options: Text to show on a button that performs some sort of reset operation"
     }
 }
