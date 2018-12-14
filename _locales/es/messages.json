@@ -35,7 +35,7 @@
         "message": "Ocultar",
         "description": "Dismisses community notifications"
     },
-    "smile_o": {
+    "emoticons": {
         "message": "Seleccionador de emoticones",
         "description": "Title of formatting item for emote picker"
     },
@@ -43,11 +43,11 @@
         "message": "Título",
         "description": "Title of formatting item header 1"
     },
-    "window_minimize": {
+    "horizontal_line": {
         "message": "Linea horizontal",
         "description": "Title of formatting item horizontal rule"
     },
-    "quote_right": {
+    "block_quote": {
         "message": "Cita",
         "description": "Title of formatting item quote"
     },
@@ -55,19 +55,15 @@
         "message": "Línea de código",
         "description": "Title of formatting item inline code"
     },
-    "file_code_o": {
-        "message": "Bloque de código",
-        "description": "Title of formatting item code block"
-    },
-    "th_large": {
+    "table": {
         "message": "Tabla",
         "description": "Title of formatting item table"
     },
-    "list_ol": {
+    "number_list": {
         "message": "Lista enumerada",
         "description": "Title of formatting item numbered list"
     },
-    "shield": {
+    "spoiler": {
         "message": "Spoiler",
         "description": "Title of formatting item spoiler"
     },
@@ -76,7 +72,7 @@
         "description": "Title of custom toolbar editor"
     },
     "dragText": {
-        "message": "Pinchar y arrastrar para reorganizar",
+        "message": "Pinchar y arrastrar, para reorganizar",
         "description": "Hover text when on a draggable area"
     },
     "themes": {
@@ -176,11 +172,11 @@
         "description": "Options: Description of custom notification icons mod"
     },
     "hideTooltips": {
-        "message": "Ocultar ayuda emergente",
+        "message": "Hides login menu tooltips.",
         "description": "Options: Title of hide tooltips mod"
     },
     "hideTooltipsDesc": {
-        "message": "Ocultar la ayuda emergente en el encabezamiento y en la barra de navegación.",
+        "message": "Ocultar la descripción emergente en el encabezamiento y en la barra de navegación.",
         "description": "Options: Description of hide tooltips mod"
     },
     "hideUnread": {
@@ -228,7 +224,7 @@
         "description": "Options: User CSS headline"
     },
     "userCSSDesc": {
-        "message": "Ingresa sólo el código CSS! Pincha en GUARDAR, para activarlo. COPIA DE SEGURIDAD en un archivo. Selecciona ESTÁNDAR en TEMAS, para usar tu propio tema.",
+        "message": "¡Ingresa sólo el código CSS! Pincha en GUARDAR, para activarlo. COPIA DE SEGURIDAD en un archivo. Selecciona ESTÁNDAR en TEMAS, para usar tu propio tema.",
         "description": "Options: User CSS placeholder/description"
     },
     "changelog": {
@@ -264,7 +260,7 @@
         "description": "Options: Text to show on a button that performs some sort of reset operation"
     },
     "confirmReset": {
-        "message": "¿Resetear la extensión? Vuelve a pinchar para confirmar.",
+        "message": "¿Resetear la extensión? Vuelve a pinchar, para confirmar.",
         "description": "Options: Status message to confirm reset"
     },
     "optionsReset": {
