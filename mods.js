@@ -86,6 +86,7 @@ function(mods) {
     userMenu();
     add_copy_code();
     discord();
+    _searchThisCategory();
     if (mods.bookmarks === '1') { _bookmarks() }
     if (mods.signatureMod === '1') { _smod() }
     if (mods.timestamp === '1') { _lastedit() }
@@ -94,18 +95,54 @@ function(mods) {
         add_copy_code();
         if (mods.signatureMod === '1') { w_smod() }
         if (mods.timestamp === '1') { w_lastedit() }
+        _searchThisCategory();
     });
 
     window.addEventListener('popstate', function() {
         add_copy_code();
         if (mods.signatureMod === '1') { w_smod() }
         if (mods.timestamp === '1') { w_lastedit() }
+        _searchThisCategory();
     });
 
     setTimeout(function() {
         notificationCheck();
     }, 700);
 });
+
+
+/* Add Altkey listener for "Search just this category" item to search in header */
+
+function _searchThisCategory() {
+    const searchItems = document.querySelectorAll("#main-nav li:last-of-type");
+    searchItems.forEach(search => {
+        search.addEventListener("click", mouseEvent => {
+            if(!mouseEvent.altKey){
+                return;
+            }
+            const isTopic = window.location.href.indexOf("topic") > -1;
+            const isCategory = window.location.href.indexOf("category") > -1;
+            let urlWithCategory;
+            if(isTopic){
+                const breadcrumb = document.querySelector(".breadcrumb > li:nth-last-child(2) > a");
+                urlWithCategory = breadcrumb.href;
+            } else if (isCategory) {
+                urlWithCategory = window.location.href;
+            } else {
+                return;
+            }
+            mouseEvent.preventDefault();
+            const match = /\/category\/([0-9]+)/.exec(urlWithCategory);
+            const currentCategory = match[1];
+            const searchUrl = `/search?term=&categories[]=${currentCategory}&searchChildren=true`;
+            if(mouseEvent.ctrlKey){
+                window.open(searchUrl);
+            } else {
+                window.location.href = searchUrl;
+            }
+        });
+    });
+}
 
 
 /* Bookmarks in navigation */
