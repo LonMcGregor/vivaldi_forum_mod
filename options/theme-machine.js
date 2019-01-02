@@ -541,14 +541,16 @@ function _cancelImport(){
     }
 };
 
-function _imp() {
+function _imp(json) {
     event.stopPropagation();
     event.preventDefault();
     if (eventType === 'paste') {
         var clipboardData = event.clipboardData || window.clipboardData;
         var themeCode = clipboardData.getData('text');
     }
-    else {
+    else if(eventType === 'input'){
+        var themeCode = json;
+    } else {
         var themeCode = event.dataTransfer.getData('text');
     }
     var shared = JSON.parse(themeCode);
@@ -605,6 +607,10 @@ function _importTheme() {
         _themeName.addEventListener('paste', function() {
             eventType = 'paste';
             _imp(event);
+        });
+        _themeName.addEventListener('input', function() {
+            eventType = 'input';
+            _imp(event.target.value);
         });
         _themeName.addEventListener('drop', function() {
             eventType = 'drop';
