@@ -3,10 +3,6 @@
         "message": "Lesezeichen",
         "description": "Link to bookmarks page from navigation bar"
     },
-    "bookmarked": {
-        "message": "Lesezeichen",
-        "description": "Link to bookmarks page from user profile menu"
-    },
     "signature": {
         "message": "Signatur",
         "description": "Signature toggle for forum posts"
@@ -172,11 +168,11 @@
         "description": "Options: Description of custom notification icons mod"
     },
     "hideTooltips": {
-        "message": "Tooltips für Login Menü deaktivieren",
+        "message": "Tooltips deaktivieren",
         "description": "Options: Title of hide tooltips mod"
     },
     "hideTooltipsDesc": {
-        "message": "Deaktiviert Tooltips im Header und in der Navigationsleiste.",
+        "message": "Deaktiviert Tooltips im Header.",
         "description": "Options: Description of hide tooltips mod"
     },
     "hideUnread": {
@@ -224,7 +220,7 @@
         "description": "Options: User CSS headline"
     },
     "userCSSDesc": {
-        "message": "Nur CSS Code eingeben! Klicke auf SPEICHERN um zu aktivieren. BACKUP auf Datei. Wähle STANDARD in THEMEN um ein eigenes Thema zu laden.",
+        "message": "Nur CSS Code eingeben! Klicke auf SCHALTEN um zu aktivieren/deaktivieren, SPEICHERN um zu speichern. BACKUP auf Datei. Wähle STANDARD in THEMEN um ein selbstständiges Thema zu laden.",
         "description": "Options: User CSS placeholder/description"
     },
     "changelog": {
@@ -243,6 +239,10 @@
         "message": "Ändern",
         "description": "Options: Text to show on a button that performs some sort of edit operation"
     },
+    "toggle": {
+        "message": "Schalten",
+        "description": "Options: Switch on or off"
+    },
     "backup": {
         "message": "Backup",
         "description": "Options: Text to show on a button that performs some sort of backup operation"
@@ -250,6 +250,10 @@
     "import": {
         "message": "Importieren",
         "description": "Options: Text to show on a button that performs some sort of import operation"
+    },
+    "cancel": {
+        "message": "Abbrechen",
+        "description": "Options: Text to show on a button that performs some sort of cancel operation"
     },
     "export": {
         "message": "Exportieren",
@@ -263,28 +267,52 @@
         "message": "Erweiterung zurücksetzen? Klicke erneut um zu bestätigen.",
         "description": "Options: Status message to confirm reset"
     },
+    "cancelReset": {
+        "message": "Vorgang abgebrochen.",
+        "description": "Options: Status message when reset is cancelled"
+    },
+    "cancelImport": {
+        "message": "Vorgang abgebrochen.",
+        "description": "Options: Status message after cancelled import"
+    },
     "optionsReset": {
         "message": "Einstellungen zurückgesetzt, Speicher bereinigt.",
         "description": "Options: Status message after reset"
     },
-    "saveUserCSS": {
-        "message": "User CSS gespeichert.",
+    "activateUserCSS": {
+        "message": "User CSS aktiviert.",
         "description": "Options: Status message for User CSS activation"
     },
+    "deactivateUserCSS": {
+        "message": "User CSS deaktiviert.",
+        "description": "Options: Status message for User CSS deactivation"
+    },
+    "saveUserCSS": {
+        "message": "User CSS gespeichert.",
+        "description": "Options: Status message for saving User CSS to storage"
+    },
     "saveTheme": {
-        "message": "Thema gespeichert und aktiviert!",
+        "message": "Thema gespeichert und aktiviert.",
         "description": "Options: Status message for theme activation"
     },
+    "exportTheme": {
+        "message": "Thema in die Zwischenablage kopiert.",
+        "description": "Options: Status message for theme sharing"
+    },
     "importTheme": {
-        "message": "Thema importiert! Klicke SPEICHERN um das Thema zu speichern.",
+        "message": "Thema importiert. Klicke SPEICHERN um das Thema zu speichern.",
         "description": "Options: Status message for theme import"
     },
+    "importThemeDesc": {
+        "message": "Themencode einfügen oder per Drag&Drop in das Importfeld ziehen.",
+        "description": "Options: Status message describing theme import"
+    },
     "statusThemes": {
-        "message": "Wähle ein Thema aus, oder gestallte ein Eigenes.",
+        "message": "Wähle ein Thema aus, oder gestalte ein Neues.",
         "description": "Options: Status message themes"
     },
     "statusModifications": {
-        "message": "Positioniere den Mauszeiger über einer Modifikation für dessen Beschreibung.",
+        "message": "Positioniere den Mauszeiger über einer Modifikation für eine Beschreibung.",
         "description": "Options: Status message modifications"
     },
     "statusInfo": {

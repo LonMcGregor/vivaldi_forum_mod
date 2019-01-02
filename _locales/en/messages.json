@@ -68,7 +68,7 @@
         "description": "Title of custom toolbar editor"
     },
     "dragText": {
-        "message": "Click and Drag to move",
+        "message": "Click and drag to move",
         "description": "Hover text when on a draggable area"
     },
     "themes": {
@@ -220,7 +220,7 @@
         "description": "Options: User CSS headline"
     },
     "userCSSDesc": {
-        "message": "Input CSS code only! Click SAVE to activate. BACKUP to file. Select STANDARD in THEMES, if you want to run your own theme.",
+        "message": "Input CSS code only! Click TOGGLE to activate/deactivate, SAVE to save to storage. BACKUP to file. Select STANDARD in THEMES, if you want to run your own theme.",
         "description": "Options: User CSS placeholder/description"
     },
     "changelog": {
@@ -239,6 +239,10 @@
         "message": "Edit",
         "description": "Options: Text to show on a button that performs some sort of edit operation"
     },
+    "toggle": {
+        "message": "Toggle",
+        "description": "Options: Switch on or off"
+    },
     "backup": {
         "message": "Backup",
         "description": "Options: Text to show on a button that performs some sort of backup operation"
@@ -247,9 +251,13 @@
         "message": "Import",
         "description": "Options: Text to show on a button that performs some sort of import operation"
     },
+    "cancel": {
+        "message": "Cancel",
+        "description": "Options: Text to show on a button that performs some sort of cancel operation"
+    },
     "export": {
         "message": "Export",
-        "description": "Options: Text to show on a button that performs some sort of export operation"
+        "description": "Options: Text to show on a button that performs some sort of export operation."
     },
     "reset": {
         "message": "Reset",
@@ -259,21 +267,45 @@
         "message": "Reset the extension? Click again to confirm.",
         "description": "Options: Status message to confirm reset"
     },
+    "cancelReset": {
+        "message": "Reset cancelled.",
+        "description": "Options: Status message after cancelled reset"
+    },
+    "cancelImport": {
+        "message": "Import cancelled.",
+        "description": "Options: Status message after cancelled import"
+    },
     "optionsReset": {
         "message": "Options reset, storage cleared.",
         "description": "Options: Status message after reset"
     },
-    "saveUserCSS": {
-        "message": "User CSS has been saved.",
+    "activateUserCSS": {
+        "message": "User CSS activated.",
         "description": "Options: Status message for User CSS activation"
     },
+    "deactivateUserCSS": {
+        "message": "User CSS deactivated.",
+        "description": "Options: Status message for User CSS deactivation"
+    },
+    "saveUserCSS": {
+        "message": "User CSS saved to storage.",
+        "description": "Options: Status message for saving User CSS to storage"
+    },
     "saveTheme": {
-        "message": "Theme saved and activated!",
+        "message": "Theme saved and activated.",
         "description": "Options: Status message for theme activation"
     },
+    "exportTheme": {
+        "message": "Theme code copied to clipboard.",
+        "description": "Options: Status message for exporting theme"
+    },
+    "importThemeDesc": {
+        "message": "Paste or drag and drop theme code into import field.",
+        "description": "Options: Status message describing theme import"
+    },
     "importTheme": {
-        "message": "Theme imported! Click SAVE to save the theme.",
-        "description": "Options: Status message for theme import"
+        "message": "Theme imported. Click SAVE to save the theme.",
+        "description": "Options: Status message confirming theme import"
     },
     "statusThemes": {
         "message": "Choose a theme, or create your own.",

@@ -3,7 +3,7 @@
     "manifest_version": 2,
     "name": "Vivaldi Forum mod",
     "short_name": "VF mod",
-    "version": "1.66",
+    "version": "2.02",
     "author": "luetage",
     "description": "Modular extension. Themes, fixes and modifications.",
     "homepage_url": "https://github.com/luetage/vivaldi_forum_mod",
@@ -22,8 +22,7 @@
     ],
     "options_ui": {
         "page": "options/options.html",
-        "open_in_tab": false,
-        "chrome_style": true
+        "open_in_tab": true
     },
     "web_accessible_resources": [
         "themes/standard.css",
@@ -34,13 +33,17 @@
         "themes/custom.css",
         "themes/logo-white.css",
         "themes/logo-black.css",
-        "themes/img/logo-mod.png",
         "themes/img/logo-white.png",
         "themes/img/logo-black.png",
+        "themes/img/logo-mod.png",
+        "themes/img/logo-mobile.svg",
         "themes/img/planks.png",
         "mods/header_scroll.js",
         "mods/header_scroll_compact.js",
+        "mods/standard-header.css",
         "mods/compact-header.css",
+        "mods/standard-header-alt.css",
+        "mods/compact-header-alt.css",
         "mods/notification-icons.css",
         "mods/timestamp.css",
         "mods/tooltips.css",
@@ -48,7 +51,8 @@
         "mods/userID.css",
         "mods/signature-mod.css",
         "mods/square-avatars.css",
-        "mods/advanced-formatting.css"
+        "mods/advanced-formatting.css",
+        "icons/icon16.png"
     ],
     "content_scripts": [
     {
