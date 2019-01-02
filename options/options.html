@@ -12,7 +12,7 @@
     <header>
         <a href="https://github.com/luetage/vivaldi_forum_mod" target="_blank" rel="noreferrer noopener"><img id="logo" src="/icons/icon24.png" alt="github"/></a>
         <button id="themes-btn" class="view"></button> | <button id="modifications-btn"></button> | <button id="info-btn"></button> | <form method="get" action="https://forum.vivaldi.net/topic/19728/vivaldi-forum-mod" target="_blank" rel="noreferrer noopener"><button id="feedback-btn" type="submit"></button></form> | <button id="reset-btn"></button>
-        <div id="status">
+        <div>
                 <span id="status"></span>
         </div>
     </header>
@@ -96,21 +96,21 @@
                                 <button class="theme-export"></button>
                             </span>
                             <div class="toggleEdit">
-                                <input type="text" maxlength="20" spellcheck="false" id='themeName'><br>
-                                <input type="color" id="colorBg">
-                                <span class="background"></span><br>
-                                <input type="color" id="colorFg">
-                                <span class="foreground"></span><br>
-                                <input type="color" id="colorHi">
-                                <span class="highlight"></span><br>
-                                <input type="color" id="colorBtn">
-                                <span class="button"></span><br>
-                                <input type="color" id="colorDrop">
-                                <span class="dropdown"></span><br>
-                                <input type="color" id="colorLi">
-                                <span class="link"></span><br>
-                                <input type="color" id="colorLi2">
-                                <span class="link2"></span>
+                                <div><input type="text" maxlength="20" spellcheck="false" id='themeName'></div>
+                                <div><input type="color" id="colorBg">
+                                <span class="background"></span></div>
+                                <div><input type="color" id="colorFg">
+                                <span class="foreground"></span></div>
+                                <div><input type="color" id="colorHi">
+                                <span class="highlight"></span></div>
+                                <div><input type="color" id="colorBtn">
+                                <span class="button"></span></div>
+                                <div><input type="color" id="colorDrop">
+                                <span class="dropdown"></span></div>
+                                <div><input type="color" id="colorLi">
+                                <span class="link"></span></div>
+                                <div><input type="color" id="colorLi2">
+                                <span class="link2"></span></div>
                             </div>
                         </div>
                     </div>
@@ -237,6 +237,7 @@
                 <div class="column-left">
                     <h2 class="changelog"></h2>
                     <div class="scroll-column">
+                        <p><strong>2.0</strong> New options page. New system for importing/exporting themes. Translations for French, German, Italian and Spanish.</p>
                         <p><strong>1.84</strong> New logos by Rexfahrer, all themes updated, User CSS toggle reenabled.</p>
                         <p><strong>1.66</strong> Theme Mod and Sprucey Bonus Dark updated, account, group and content margin fixes for all screen sizes.</p>
                         <p><strong>1.65</strong> Modification and custom theme fixes after big Vivaldi Forum update. Only custom themes working.</p>
