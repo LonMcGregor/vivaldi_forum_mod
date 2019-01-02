@@ -608,7 +608,7 @@ function _importTheme() {
             eventType = 'paste';
             _imp(event);
         });
-        _themeName.addEventListener('input', function() {
+        _themeName.addEventListener('blur', function() {
             eventType = 'input';
             _imp(event.target.value);
         });
