@@ -541,15 +541,12 @@ function _cancelImport(){
     }
 };
 
-function _imp(json) {
+function _imp(event) {
     event.stopPropagation();
     event.preventDefault();
     if (eventType === 'paste') {
         var clipboardData = event.clipboardData || window.clipboardData;
         var themeCode = clipboardData.getData('text');
-    }
-    else if(eventType === 'input'){
-        var themeCode = json;
     } else {
         var themeCode = event.dataTransfer.getData('text');
     }
@@ -604,13 +601,9 @@ function _importTheme() {
         saveBtn.disabled = true;
         exportBtn.disabled = true;
         _themeName.focus();
-        _themeName.addEventListener('paste', function() {
+        _themeName.addEventListener('paste', function(event) {
             eventType = 'paste';
             _imp(event);
-        });
-        _themeName.addEventListener('blur', function() {
-            eventType = 'input';
-            _imp(event.target.value);
         });
         _themeName.addEventListener('drop', function() {
             eventType = 'drop';
