@@ -86,6 +86,7 @@ function(mods) {
     userMenu();
     add_copy_code();
     discord();
+    _modflagsself()
     if (mods.bookmarks === '1') { _bookmarks() }
     if (mods.signatureMod === '1') { _smod() }
     if (mods.timestamp === '1') { _lastedit() }
@@ -94,18 +95,49 @@ function(mods) {
         add_copy_code();
         if (mods.signatureMod === '1') { w_smod() }
         if (mods.timestamp === '1') { w_lastedit() }
+        _modflagsself();
     });
 
     window.addEventListener('popstate', function() {
         add_copy_code();
         if (mods.signatureMod === '1') { w_smod() }
         if (mods.timestamp === '1') { w_lastedit() }
+        _modflagsself();
     });
 
     setTimeout(function() {
         notificationCheck();
     }, 700);
 });
+
+/* Assign mod flag to self */
+function _modflagsself(){
+    if(window.location.href.indexOf("https://forum.vivaldi.net/flags/")===0 && !document.querySelector("#mod-assignMe")){
+        const options = Array.from(document.querySelectorAll("#assignee option"));
+        const userName = document.querySelector("#user-header-name").innerText;
+        let myId = 0;
+        for (let i = 0; i < options.length; i++) {
+            if(options[i].innerText === userName){
+                myId = options[i].value;
+                break;
+            }
+        }
+        if(myId===0){
+            console.error("Failed to get logged in user");
+            return;
+        }
+        const assignedUser = document.querySelector("#assignee");
+        const assignMe = document.createElement("span");
+        assignMe.className = "btn btn-block btn-primary";
+        assignMe.id = "mod-assignMe";
+        assignMe.innerText = `Assign to ${userName}`;
+        assignMe.addEventListener("click", () => {
+            assignedUser.value = myId;
+        });
+        assignedUser.insertAdjacentElement("afterend", assignMe);
+    }
+}
+
 
 
 /* Bookmarks in navigation */
