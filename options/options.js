@@ -14,7 +14,8 @@ function _restore() {
         'userID': '',
         'signatureMod': '',
         'square': '',
-        'cssToggle': '0'
+        'cssToggle': '0',
+        'linkBugs': ''
     },
     function(restore){
         chrome.storage.local.get({'userCSS': ''}, function(local) {
@@ -63,6 +64,9 @@ function _restore() {
             status.style.opacity = '0';
             status.innerText = chrome.i18n.getMessage('statusThemes');
             _fade();
+        }
+        if (restore.linkBugs === '1') {
+            document.getElementById('linkBugs').classList.add('selected');
         }
     });
 };

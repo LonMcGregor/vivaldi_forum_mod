@@ -13,7 +13,8 @@ chrome.storage.sync.get({
     'userID': '',
     'signatureMod' : '',
     'square': '',
-    'advancedFormatting': ''
+    'advancedFormatting': '',
+    'linkBugs': '',
 },
 function(mods) {
     if (mods.headerScroll === '1') {
@@ -81,6 +82,12 @@ function(mods) {
         modAdvancedFormatting.type = 'text/css';
         modAdvancedFormatting.rel = 'stylesheet';
         document.getElementsByTagName('head')[0].appendChild(modAdvancedFormatting);
+    }
+    if (mods.linkBugs === '1') {
+        var modLinkBugs = document.createElement('script');
+        modLinkBugs.src = chrome.extension.getURL('mods/linkBugs.js');
+        modLinkBugs.type = 'text/javascript';
+        document.getElementsByTagName('head')[0].appendChild(modLinkBugs);
     }
 
     userMenu();

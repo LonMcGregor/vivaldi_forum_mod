@@ -318,5 +318,9 @@
     "statusInfo": {
         "message": "A big thank you to all users and contributors!",
         "description": "Options: Status message info"
+    },
+    "linkBugs": {
+        "message": "Linkify Bugs",
+        "description": "Mod: add bug links"
     }
 }

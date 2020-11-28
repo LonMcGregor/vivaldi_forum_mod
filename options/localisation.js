@@ -52,6 +52,7 @@ function localisation() {
     document.getElementById('css-save').innerText = chrome.i18n.getMessage('save');
     document.getElementById('css-backup').innerText = chrome.i18n.getMessage('backup');
     document.getElementById('userCSS').placeholder = chrome.i18n.getMessage('userCSSDesc');
+    document.getElementById('linkBugs').innerText = chrome.i18n.getMessage('linkBugs');
 
     //info
     document.querySelector('.changelog').innerText = chrome.i18n.getMessage('changelog');
