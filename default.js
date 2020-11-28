@@ -85,9 +85,9 @@ function add_copy_code() {
 /* Unofficial discord link in community header dropdown */
 
 function discord() {
-    const vivMenu = document.querySelector('#vivaldimenu > li:nth-child(5) ul');
-    const addLink = document.createElement('li');
-    addLink.innerHTML = '<a href="https://discord.gg/cs6bTDU" target="_blank" rel="noreferrer noopener">Discord</a>';
+    const vivMenu = document.querySelector('.footerlinks');
+    const addLink = document.createElement('span');
+    addLink.innerHTML = ' | <a href="https://discord.gg/cs6bTDU" target="_blank" rel="noreferrer noopener">Discord</a>';
     vivMenu.appendChild(addLink);
 };
 
