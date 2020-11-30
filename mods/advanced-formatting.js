@@ -366,6 +366,21 @@ function emotePicked(event){
 }
 
 /**
+ * User clicked on a new custom emote
+ * @param {MouseEvent} event mouse click
+ */
+function emoteCustomPicked(event){
+    const textarea = document.querySelector(".composer .write");
+    if(!textarea){
+        hideModal(EMOTE_MODAL);
+        return;
+    }
+    var datasrc = event.target.src;
+    uploadContentFiles(datasrc);
+    hideModal(EMOTE_MODAL);
+}
+
+/**
  * Started to drag an emote, allow for dropping in text box
  * @param {DragEvent} dragEvent
  */
@@ -393,6 +408,18 @@ function makeEmoteButton(emoteName, emoteUrl){
 }
 
 /**
+ * Create the DOM for a new custom emote
+ * @param {string} emoteDataUrl
+ * @returns DOM element
+ */
+function makeCustomeEmoteButton(emoteDataUrl){
+    const emoteButton = document.createElement("img");
+    emoteButton.src = emoteDataUrl;
+    emoteButton.addEventListener("click", emoteCustomPicked);
+    return emoteButton;
+}
+
+/**
  * Creates the emote picker and appends it to the body
  */
 function createEmotePicker(){
@@ -403,6 +430,12 @@ function createEmotePicker(){
             box.appendChild(makeEmoteButton(emoteName, emoteUrl));
         }
     }
+    chrome.storage.local.get({"customEmotes": []}, data =>{
+        var customEmotes = JSON.parse(data["customEmotes"]);
+        customEmotes.forEach(emote => {
+            box.appendChild(makeCustomeEmoteButton(emote));
+        });
+    });
     document.body.appendChild(box);
 }
 
@@ -896,15 +929,15 @@ function pageMutated(mutationList){
     });
 }
 
-/*
-Inject the emoji insertion script onto the webpage
+/**
+* Inject the emoji insertion script onto the webpage
+* @param {string} dataurl
 */
-function uploadContentFiles() {
+function uploadContentFiles(dataUrl) {
     /* turn the function into a script */
     var txtscript =  '(' + simulateImageDrop + ')();';
     /* choose our image. Must be a blob. Can't download online images like this for security reasons */
-    var image = "data:image/png;base64,R0lGODlhDwARAPcAAAAAAA0MDBkRAxsbGycaCwI4AjAlBRESIiopKTw8PFYVFRFtAndVOEp9LUJCQlJSS15eXXdtWXFxcZgJEqwECpEnB7sKJKYlL8YBCuIEBP8AAOoUFPQfH881ANUIIfkTM+ErLf0yMqhDD6tfFb95ANhIAP9FBPFbAvlvA8ZmL9Z+Maw/R/c3S5xxTfVPT8B5SPddZ/1vbwSCBDOMBhetCCy5Clu0EjHWCzjyA3TTBG2jUnDCSLuEALmIP8KKAMeRAMqUANSSANSfAN+cANmIFt6aFeOCCfyEA/6YBNSgANilAN6rAM6xHOimAv+nBf+vDOOxAOW5B+u8AOq4C/CwAP62A/GpHu22FP+3HvuXLNi6I+egO43ZBqTdGpTmAKfoAKraKbTlIe7BAPLGAP3CAPbMAP/NAPDBC/PKDPjMDfLTBPrSAPXcA/7cAPnWDfzcC+/CG/TLEvfREv3dF//kAP/rAP3hCv/0AP/+APvmE/3yFt3EKePJLv/CKOfPNf7MMu7WN/XbO8nrJf3xIrCCWpKCZKqRfIW6eteJWcSZUtCoS9iYdsqlfeaobpLha/THXf/kT//RYP32aAU3sktcjWF/pyA91wJb/FJt3rVhtjOivj+H0jaqxweG/Q+n/iC5/nKWw0O31HugzmmF6m2S7nmq8QzZ/i/J/0zH5ULW/lvf/mTX83bj/oWFhZeXl7eahYqeuZykuqWlpa6vsra2tb+/v9iKlfaIiNq5nOitjP6jo7bRsvXah//4l8nBuP3Rqfrnt4+w2bW7y4mf84qu8KW59K7B3L/B0JfA7KvD5afK7LLP77zL+L3V8pHp/6vu/8bGxs7OzsnK2NTU1NPU3tzc3PbHx87iy//7ztfZ48na9s3f+NDe9Nbi+d/r+8Tz/9j4/+bm5ubm7ezs7fPp4PT06fnv8evy/PPy9f/59v///////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAOsALAAAAAAPABEABwh0ANcJBECwYEGBCAHcwMGwIUMACW8sdOgQokKJFB3eIChxYkYcGxUSXEBxAUeOJgEgaIhgZMgbNAqSTAmAxkuYBBHcaFlTosWOQIFCXHcxqNCIN2oErTF0oMQaUKMyReg0qdSmVBXWoEFjKtWsW2N+HXvwa0AAOw==";
-    txtscript = txtscript.replace('tmpurl', `"${image}"`);
+    txtscript = txtscript.replace('tmpurl', `"${dataUrl}"`);
     /* put it on the page */
     var script = document.createElement("script");
     var inlineScript = document.createTextNode(txtscript);
@@ -912,11 +945,12 @@ function uploadContentFiles() {
     document.querySelector("body").appendChild(script);
 }
 
-/* simulate a drag and drop into the text composer
-NOTE: Must be injected directly on to the page. For security reasons, it wont run in a content script*/
+/** simulate a drag and drop into the text composer
+* @note Must be injected directly on to the page. For security reasons, it wont run in a content script
+*/
 async function simulateImageDrop(){
     /* Download our image behind the scenes */
-    var tmpfile = await fetch(tmpurl).then(r => r.blob()).then(tmpblob => new File([tmpblob], "alien.gif", { type: "image/gif" }));
+    var tmpfile = await fetch(tmpurl).then(r => r.blob()).then(tmpblob => new File([tmpblob], "alien.gif", { type: "image/gif" })); /* TODO each needs a name and mime type */
 
     /* We need to make a new data transfer object to contain our files
     Thank you fisker on Github for the point in the right direction
