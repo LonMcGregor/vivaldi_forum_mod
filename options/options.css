@@ -458,3 +458,14 @@ button.deactivated:hover {
     color: hsl(0, 0%, 99%);
     border-color: hsl(0, 0%, 37%);
 }
+
+/* custom emotes */
+#emotetable {
+    display: grid;
+    grid-template-columns: 5fr 5fr 5fr 5fr 5fr;
+}
+
+#emotetable input {
+    grid-column-start: 1;
+    grid-column-end: 1;
+}
