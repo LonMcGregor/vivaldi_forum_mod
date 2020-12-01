@@ -15,7 +15,8 @@ function _restore() {
         'signatureMod': '',
         'square': '',
         'cssToggle': '0',
-        'linkBugs': ''
+        'linkBugs': '',
+        'undoMoji': '',
     },
     function(restore){
         chrome.storage.local.get({'userCSS': ''}, function(local) {
@@ -67,6 +68,9 @@ function _restore() {
         }
         if (restore.linkBugs === '1') {
             document.getElementById('linkBugs').classList.add('selected');
+        }
+        if (restore.undoMoji === '1') {
+            document.getElementById('undoMoji').classList.add('selected');
         }
         loadCustomEmoteSettings();
     });

@@ -15,6 +15,7 @@ chrome.storage.sync.get({
     'square': '',
     'advancedFormatting': '',
     'linkBugs': '',
+    'undoMoji': '',
 },
 function(mods) {
     if (mods.headerScroll === '1') {
@@ -88,6 +89,12 @@ function(mods) {
         modLinkBugs.src = chrome.extension.getURL('mods/linkBugs.js');
         modLinkBugs.type = 'text/javascript';
         document.getElementsByTagName('head')[0].appendChild(modLinkBugs);
+    }
+    if (mods.linkBugs === '1') {
+        var modUndoEmoji = document.createElement('script');
+        modUndoEmoji.src = chrome.extension.getURL('mods/undoMoji.js');
+        modUndoEmoji.type = 'text/javascript';
+        document.getElementsByTagName('head')[0].appendChild(modUndoEmoji);
     }
 
     userMenu();

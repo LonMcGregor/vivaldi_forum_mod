@@ -48,6 +48,7 @@
         "mods/square-avatars.css",
         "mods/advanced-formatting.css",
         "mods/linkBugs.js",
+        "mods/undoMoji.js",
         "icons/icon16.png"
     ],
     "content_scripts": [

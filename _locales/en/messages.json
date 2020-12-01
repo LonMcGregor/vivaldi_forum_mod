@@ -322,5 +322,9 @@
     "linkBugs": {
         "message": "Linkify Bugs",
         "description": "Mod: add bug links"
+    },
+    "undoMoji": {
+        "message": "Undo Emoji Images",
+        "description": "Mod: turn emoji images back into native text"
     }
 }
