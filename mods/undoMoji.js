@@ -1,6 +1,8 @@
 /* find all the image emojis and turn them into native unicode ones */
 function undoMoji(img){
     var emojidom = document.createElement("span");
+    emojidom.className = "vm-emoji";
+    emojidom.title = img.title;
     emojidom.innerText = img.alt;
     img.insertAdjacentElement("beforebegin", emojidom);
     var post = img.parentElement;
