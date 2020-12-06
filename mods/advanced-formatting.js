@@ -371,10 +371,19 @@ function makeCustomeEmoteButton(emoteData){
 function createEmotePicker(){
     const box = makeModalBox(EMOTE_MODAL, chrome.i18n.getMessage("emoticons"));
     chrome.storage.local.get({"customEmotes": []}, data =>{
-        var customEmotes = JSON.parse(data["customEmotes"]);
-        customEmotes.forEach(emote => {
-            box.appendChild(makeCustomeEmoteButton(emote));
-        });
+        if(data["customEmotes"].length === 0 || data["customEmotes"] === "[]"){
+            chrome.runtime.sendMessage("reset emotes", () => {
+                var customEmotes = JSON.parse(data["customEmotes"]);
+                customEmotes.forEach(emote => {
+                    box.appendChild(makeCustomeEmoteButton(emote));
+                });
+            });
+        } else {
+            var customEmotes = JSON.parse(data["customEmotes"]);
+            customEmotes.forEach(emote => {
+                box.appendChild(makeCustomeEmoteButton(emote));
+            });
+        }
     });
     document.body.appendChild(box);
 }
@@ -890,7 +899,7 @@ function uploadContentFiles(dataUrl, datatitle) {
 */
 async function simulateImageDrop(){
     /* Download our image behind the scenes */
-    var tmpfile = await fetch("FORMATURL").then(r => r.blob()).then(tmpblob => new File([tmpblob], "FORMATTITLE", { type: "image/FORMATTYPE" })); /* TODO each needs a name and mime type */
+    var tmpfile = await fetch("FORMATURL").then(r => r.blob()).then(tmpblob => new File([tmpblob], "FORMATTITLE", { type: "image/FORMATTYPE" }));
 
     /* We need to make a new data transfer object to contain our files
     Thank you fisker on Github for the point in the right direction
