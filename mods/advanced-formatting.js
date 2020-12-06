@@ -1,62 +1,5 @@
 "use strict";
 
-/* ==========Globals=============*/
-const EMOTES = {
-    alien:"1539692482285-alien.gif",
-    angel:"1539692493644-angel.gif",
-    awww:"1539692536730-awww.gif",
-    banana:"1539692630638-banana.gif",
-    beer:"1539692709259-beer.gif",
-    bigeyes:"1539692683566-bigeyes.gif",
-    bigsmile:"1539687021352-bigsmile.gif",
-    blush:"1539687052167-blush.gif",
-    bomb:"1539692948902-bomb.gif",
-    bug:"1539685604359-bug.gif",
-    bye:"1539692998605-bye.gif",
-    cat:"1539693028753-cat.gif",
-    cheers:"1539698180973-cheers.gif",
-    chef:"1539692893638-chef.gif",
-    coffee:"1539685551254-coffee.gif",
-    confused:"1539685266409-confused.gif",
-    cool:"1539693137735-cool.gif",
-    detective:"1539693179226-detective.gif",
-    devil:"1539693232474-devil.gif",
-    doh:"1539685506587-doh.gif",
-    drunk:"1539693282716-drunk.gif",
-    eek:"1539693323529-eek.gif",
-    faint:"1539693390072-faint.gif",
-    flirt:"1539685662035-flirt.gif",
-    frown:"1539685209586-frown.gif",
-    furious:"1539685719517-furious.gif",
-    haha:"1539685426101-haha.gif",
-    headbang:"1539686921747-headbang.gif",
-    idea:"1539686816525-idea.gif",
-    irked:"1539698254681-irked.gif",
-    jester:"1539685753306-jester.gif",
-    lookleft:"1539698335612-left.gif",
-    lookright:"1539698359299-right.gif",
-    mad:"1539698407597-mad.gif",
-    no:"1539686722752-no.gif",
-    party:"1539698651945-party.gif",
-    pingu:"1539685811063-pingu.gif",
-    rip:"1539693574973-rip.gif",
-    rolleyes:"1539693612367-rolleyes.gif",
-    smile:"1539685039446-smile.gif",
-    spock:"1539685852804-spock.gif",
-    thumbsdown:"1539693743513-thumbsdown.gif",
-    thumbsup:"1539693760607-thumbsup.gif",
-    troll:"1539685894751-troll.gif",
-    waiting:"1539685920932-waiting.gif",
-    weeping:"1539685954572-weeping.gif",
-    whistle:"1539698509979-whistle.gif",
-    wink:"1539698493281-wink.gif",
-    wizard:"1539685980783-wizard.gif",
-    worried:"1539698551154-worried.gif",
-    yes:"1539686029165-yes.gif",
-    zipped:"1539685367819-zipped.gif",
-    zzz:"1539685301665-zzz.gif"
-};
-const STATIC_URL = "https://lonm.vivaldi.net/wp-content/uploads/sites/1533/2018/10/";
 let DRAG_START_POS = {x:0, y:0};
 /**
  * Keep a reference to the list button used to simulte clicks on hidden elements
@@ -376,7 +319,8 @@ function emoteCustomPicked(event){
         return;
     }
     var datasrc = event.target.src;
-    uploadContentFiles(datasrc);
+    var datatitle = event.target.title;
+    uploadContentFiles(datasrc, datatitle);
     hideModal(EMOTE_MODAL);
 }
 
@@ -409,27 +353,23 @@ function makeEmoteButton(emoteName, emoteUrl){
 
 /**
  * Create the DOM for a new custom emote
- * @param {string} emoteDataUrl
+ * @param {[string, string]} emoteData
  * @returns DOM element
  */
-function makeCustomeEmoteButton(emoteDataUrl){
+function makeCustomeEmoteButton(emoteData){
     const emoteButton = document.createElement("img");
-    emoteButton.src = emoteDataUrl;
+    emoteButton.src = emoteData[1];
+    emoteButton.title = emoteData[0];
     emoteButton.addEventListener("click", emoteCustomPicked);
     return emoteButton;
 }
 
 /**
  * Creates the emote picker and appends it to the body
+ * Read emotes from settings storage
  */
 function createEmotePicker(){
     const box = makeModalBox(EMOTE_MODAL, chrome.i18n.getMessage("emoticons"));
-    for (const emoteName in EMOTES) {
-        if (EMOTES.hasOwnProperty(emoteName)) {
-            const emoteUrl = EMOTES[emoteName];
-            box.appendChild(makeEmoteButton(emoteName, emoteUrl));
-        }
-    }
     chrome.storage.local.get({"customEmotes": []}, data =>{
         var customEmotes = JSON.parse(data["customEmotes"]);
         customEmotes.forEach(emote => {
@@ -633,10 +573,6 @@ function createToolbarCustomModal(){
     box.addEventListener("dragover", makeValidDropTarget);
     const list = document.createElement("ul");
     box.appendChild(list);
-    const button = document.createElement("button");
-    button.addEventListener("click", uploadContentFiles);
-    button.innerHTML = "BLAH";
-    box.append(button);
     addJqueryClickSimulator(box)
     document.body.appendChild(box);
 }
@@ -932,12 +868,16 @@ function pageMutated(mutationList){
 /**
 * Inject the emoji insertion script onto the webpage
 * @param {string} dataurl
+* @param {string} datatitle
 */
-function uploadContentFiles(dataUrl) {
+function uploadContentFiles(dataUrl, datatitle) {
     /* turn the function into a script */
     var txtscript =  '(' + simulateImageDrop + ')();';
     /* choose our image. Must be a blob. Can't download online images like this for security reasons */
-    txtscript = txtscript.replace('tmpurl', `"${dataUrl}"`);
+    var datafile = datatitle.split(".");
+    txtscript = txtscript.replace('FORMATURL', dataUrl);
+    txtscript = txtscript.replace('FORMATTITLE', datatitle);
+    txtscript = txtscript.replace('FORMATTYPE', datafile[1]);
     /* put it on the page */
     var script = document.createElement("script");
     var inlineScript = document.createTextNode(txtscript);
@@ -950,7 +890,7 @@ function uploadContentFiles(dataUrl) {
 */
 async function simulateImageDrop(){
     /* Download our image behind the scenes */
-    var tmpfile = await fetch(tmpurl).then(r => r.blob()).then(tmpblob => new File([tmpblob], "alien.gif", { type: "image/gif" })); /* TODO each needs a name and mime type */
+    var tmpfile = await fetch("FORMATURL").then(r => r.blob()).then(tmpblob => new File([tmpblob], "FORMATTITLE", { type: "image/FORMATTYPE" })); /* TODO each needs a name and mime type */
 
     /* We need to make a new data transfer object to contain our files
     Thank you fisker on Github for the point in the right direction
