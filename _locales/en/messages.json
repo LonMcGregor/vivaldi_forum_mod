@@ -326,5 +326,17 @@
     "undoMoji": {
         "message": "Undo Emoji Images",
         "description": "Mod: turn emoji images back into native text"
+    },
+    "customEmoteTitle": {
+        "message": "Custom Emotes (Advanced Formatting)",
+        "description": "Custom emotes section title"
+    },
+    "customEmoteReset": {
+        "message": "Reset Emotes",
+        "description": "Custom emotes reset button text"
+    },
+    "storageUse": {
+        "message": "Storage Used by custom CSS & custom emotes: ",
+        "description": "Label for storage monitor. Appears next to a progress bar"
     }
 }

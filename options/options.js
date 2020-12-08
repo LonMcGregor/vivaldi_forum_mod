@@ -72,7 +72,6 @@ function _restore() {
         if (restore.undoMoji === '1') {
             document.getElementById('undoMoji').classList.add('selected');
         }
-        loadCustomEmoteSettings();
     });
 };
 
@@ -160,80 +159,6 @@ function _backupUserCSS() {
     });
 };
 
-
-/* Load custom emotes */
-customEmotes = [];
-/* add all the custom emotes the first time advanced formatting is enabled */
-document.getElementById('advancedFormatting').addEventListener("click", e => {
-    chrome.storage.local.get({"customEmotes": []}, data =>{
-        if(data["customEmotes"].length === 0 || data["customEmotes"] === "[]"){
-            resetEmotes();
-        }
-    });
-});
-function loadCustomEmoteSettings(){
-    document.querySelector("#customemotes").addEventListener("input", addCustomEmote);
-    document.querySelector("#resetEmotes").addEventListener("click", resetEmotes);
-    loadCustomEmotes();
-}
-function resetEmotes(){
-    chrome.runtime.sendMessage("reset emotes", () => {
-        Array.from(document.querySelectorAll("#emotetable div")).forEach(
-            emotediv => {emotetable.removeChild(emotediv);}
-        );
-        loadCustomEmotes();
-    });
-}
-function loadCustomEmotes(){
-    chrome.storage.local.get({"customEmotes": []}, data =>{
-        var emotetable = document.querySelector("#emotetable");
-        var emotebutton = document.querySelector("#emotetable button");
-        customEmotes = JSON.parse(data["customEmotes"]);
-        customEmotes.forEach(emote => {
-            var emotedel = document.createElement("button");
-            emotedel.innerText = "X";
-            emotedel.addEventListener("click", deleteCustomEmote)
-            var emoteimg = document.createElement("img");
-            emoteimg.src = emote[1];
-            emoteimg.title = emote[0];
-            var emotediv = document.createElement("div");
-            emotediv.appendChild(emoteimg);
-            emotediv.appendChild(emotedel);
-            emotetable.insertBefore(emotediv, emotebutton);
-        });
-    });
-}
-function deleteCustomEmote(event){
-    var emotediv = event.target.parentElement;
-    var targetEmote = emotediv.querySelector("img").title;
-    customEmotes = customEmotes.filter(x => x[0] !== targetEmote);
-    emotediv.parentElement.removeChild(emotediv);
-    chrome.storage.local.set({"customEmotes": JSON.stringify(customEmotes)});
-}
-function sleep(ms) {
-   return new Promise(resolve => setTimeout(resolve, ms));
-}
-/* TODO file size limit */
-async function addCustomEmote(event){
-    Array.from(event.target.files).forEach(emotefile => {
-        var reader = new FileReader();
-        reader.readAsDataURL(emotefile);
-        reader.addEventListener("load", () => {
-            /* prevent dupes */
-            if(!customEmotes.some(x => x[0]===emotefile.name || x[1]===reader.result)){
-                customEmotes.push([emotefile.name, reader.result]);
-            }
-        });
-        /* this is async so we need to wait a bit */
-    });
-    await sleep(500); /* proper way is to wait on reader.readystate, but that just blocks things up as everything is on the same thread */
-    chrome.storage.local.set({"customEmotes": JSON.stringify(customEmotes)});
-    var emotetable = document.querySelector("#emotetable");
-    Array.from(document.querySelectorAll("#emotetable div")).forEach(
-        emotediv => {emotetable.removeChild(emotediv);}
-    );
-    loadCustomEmotes();
-}
 
 /* Reset Extension */
 

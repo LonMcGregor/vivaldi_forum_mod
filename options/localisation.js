@@ -54,6 +54,9 @@ function localisation() {
     document.getElementById('userCSS').placeholder = chrome.i18n.getMessage('userCSSDesc');
     document.getElementById('linkBugs').innerText = chrome.i18n.getMessage('linkBugs');
     document.getElementById('undoMoji').innerText = chrome.i18n.getMessage('undoMoji');
+    document.querySelector('#customemotes h2').innerText = chrome.i18n.getMessage('customEmoteTitle');
+    document.querySelector('#customemotes button').innerText = chrome.i18n.getMessage('customEmoteReset');
+    document.getElementById('storageUse').innerText = chrome.i18n.getMessage('storageUse');
 
     //info
     document.querySelector('.changelog').innerText = chrome.i18n.getMessage('changelog');
