@@ -212,7 +212,6 @@ async function loadFromURL(topic){
  * A file(s) has/have been selected. Add them as custom emotes.
  * Only adds up to a max of 4KB in any one image
  * @param {FileInput} event
- * TODO add from URL
  */
 async function addCustomEmote(event){
     Array.from(event.target.files).forEach(emotefile => {

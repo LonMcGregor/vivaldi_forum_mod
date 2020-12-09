@@ -227,9 +227,6 @@ function toggleModal(event, modalId){
         }
     } else {
         switch (modalId) {
-        case EMOTE_MODAL:
-            createEmotePicker();
-            break;
         case TOOLBAR_MODAL:
             createToolbarCustomModal();
             break;
@@ -240,8 +237,6 @@ function toggleModal(event, modalId){
     }
 }
 
-// TODO add the emotes to emojis
-// TODO use the old insert code for URLs
 // TODO after first upload of a custom emote, replace it with a URL link
 
 /**
@@ -302,6 +297,7 @@ function modalIsVisible(id){
  * @param {MouseEvent} event mouse click
  */
 function emotePicked(event){
+    event.preventDefault();
     const textarea = document.querySelector(".composer .write");
     if(!textarea){
         hideModal(EMOTE_MODAL);
@@ -309,7 +305,6 @@ function emotePicked(event){
     }
     const newtext = `![${event.target.alt}](${event.target.src} "${event.target.alt}") `;
     writeToTextarea(newtext, "");
-    hideModal(EMOTE_MODAL);
 }
 
 /**
@@ -317,6 +312,7 @@ function emotePicked(event){
  * @param {MouseEvent} event mouse click
  */
 function emoteCustomPicked(event){
+    event.preventDefault();
     const textarea = document.querySelector(".composer .write");
     if(!textarea){
         hideModal(EMOTE_MODAL);
@@ -325,35 +321,6 @@ function emoteCustomPicked(event){
     var datasrc = event.target.src;
     var datatitle = event.target.title;
     uploadContentFiles(datasrc, datatitle);
-    hideModal(EMOTE_MODAL);
-}
-
-/**
- * Started to drag an emote, allow for dropping in text box
- * @param {DragEvent} dragEvent
- */
-function emoteDragStart(dragEvent){
-    const newtext = `![${event.target.alt}](${event.target.src} "${event.target.alt}") `;
-    dragEvent.dataTransfer.setData("text", newtext);
-    dragEvent.dataTransfer.dropEffect = "copy";
-    dragEvent.dataTransfer.effectAllowed = "copy";
-}
-
-/**
- * Create the DOM for an emote
- * @param {string} emoteName
- * @param {string} emoteUrl
- * @returns DOM element
- */
-function makeEmoteButton(emoteName, emoteUrl){
-    //<a class="emoji-link" name="adult" href="#"><span class="vm-emoji" title=":adult:">🧑</span></a>
-    const emoteButton = document.createElement("img");
-    emoteButton.alt = emoteName;
-    emoteButton.title = emoteName;
-    emoteButton.src = STATIC_URL + emoteUrl;
-    emoteButton.addEventListener("click", emotePicked);
-    emoteButton.addEventListener("dragstart", emoteDragStart);
-    return emoteButton;
 }
 
 /**
@@ -364,7 +331,6 @@ function makeEmoteButton(emoteName, emoteUrl){
  * or referencing an image already uploaded to the forum.
  */
 function makeCustomeEmoteButton(emoteData){
-    //<a class="emoji-link" name="adult" href="#"><span class="vm-emoji" title=":adult:">🧑</span></a>
     const emoteButton = document.createElement("img");
     emoteButton.title = emoteData[0];
     if(emoteData[1].indexOf("data:")===0){
@@ -378,36 +344,31 @@ function makeCustomeEmoteButton(emoteData){
 }
 
 /**
- * Creates the emote picker and appends it to the body
- * Read emotes from settings storage
+ * Emoji search string has changed
+ * @param {InputEvent} event
  */
-function createEmotePicker(){
-    const box = makeModalBox(EMOTE_MODAL, chrome.i18n.getMessage("emoticons"));
-    chrome.storage.local.get({"customEmotes": []}, data =>{
-        if(data["customEmotes"].length === 0 || data["customEmotes"] === "[]"){
-            chrome.runtime.sendMessage("reset emotes", () => {
-                var customEmotes = JSON.parse(data["customEmotes"]);
-                customEmotes.forEach(emote => {
-                    box.appendChild(makeCustomeEmoteButton(emote));
-                });
-            });
-        } else {
-            var customEmotes = JSON.parse(data["customEmotes"]);
-            customEmotes.forEach(emote => {
-                box.appendChild(makeCustomeEmoteButton(emote));
-            });
-        }
-    });
-    document.body.appendChild(box);
+function emojiSearch(event){
+    const terms = event.target.value.trim();
+    const emotes = Array.from(document.querySelectorAll("#emoji-tab-emoticons img"));
+    const matches = emotes.filter(x => x.title.includes(terms));
+    const negmatches = emotes.filter(x => !x.title.includes(terms));
+    matches.forEach(emote => emote.className = "");
+    negmatches.forEach(emote => emote.className = "hidden");
+    /* stop force showing when search is removed */
+    document.querySelector("#emoji-tab-emoticons").className = (terms === "") ? "tab-pane" : "tab-pane searching";
 }
 
 /**
  * Add the custom emotes to a special nodebb emote picker tab
  */
 function addCustomEmotesToNodeBBPicker(){
+    const emojipanel = document.querySelector("#emoji-tab-emoticons");
+    if(emojipanel){
+        return; /* don't add it twice */
+    }
     const dialog = document.querySelector("#emoji-dialog");
     if(!dialog){
-        setTimeout(addCustomEmotesToNodeBBPicker, 500);
+        setTimeout(addCustomEmotesToNodeBBPicker, 500); /* if the dialog spawned late, wait */
         return;
     }
     /* add tab */
@@ -429,7 +390,7 @@ function addCustomEmotesToNodeBBPicker(){
     newpanel.id = "emoji-tab-emoticons";
     chrome.storage.local.get({"customEmotes": []}, data =>{
         if(data["customEmotes"].length === 0 || data["customEmotes"] === "[]"){
-            newpanel.innerText = "Custom emotes didn't load, please go to settings and reset them.";
+            newpanel.innerText = chrome.i18n.getMessage("customEmoteFirstRun");
         } else {
             var customEmotes = JSON.parse(data["customEmotes"]);
             customEmotes.forEach(emote => {
@@ -438,24 +399,7 @@ function addCustomEmotesToNodeBBPicker(){
         }
         panels.insertAdjacentElement("afterbegin", newpanel);
     });
-    // TODO this works, but the other tabs don't hide the new tab when they are activated. need to use a mutation observer and do it manually.
-}
-
-/**
- * Creates and adds the emote picker button to the message composer's formatting strip
- */
-function addEmotePickerButton(){
-    console.log("hi");
-    debugger;
-    const composerFormatters = document.querySelector(".composer .formatting-group");
-    const emotePickerButton = document.createElement("li");
-    emotePickerButton.setAttribute("tabindex", "-1");
-    emotePickerButton.setAttribute("data-format", "heart-o");
-    emotePickerButton.title = chrome.i18n.getMessage("emoticons");
-    emotePickerButton.innerHTML = "<i class='fa fa-heart-o'></i>";
-    emotePickerButton.addEventListener("click", event => {toggleModal(event, EMOTE_MODAL);});
-    emotePickerButton.id = "emote-picker-button";
-    composerFormatters.appendChild(emotePickerButton);
+    dialog.querySelector("input").addEventListener("input", emojiSearch);
 }
 
 /* hijack the real emotes button */
@@ -529,7 +473,6 @@ function getReferencesToButtons(){
         "picture-o": document.querySelector(".composer .formatting-group li[data-format='picture-o']"),
         zen: document.querySelector(".composer .formatting-group li[data-format='zen']"),
         picture: document.querySelector(".composer .formatting-group li[data-format='picture']"),
-        "heart-o": document.querySelector(".composer .formatting-group li[data-format='heart-o']"),
         "emoji-add-emoji": document.querySelector(".composer .formatting-group li[data-format='emoji-add-emoji']"),
         header: document.querySelector(".composer .formatting-group li[data-format='header']"),
         "window-minimize": document.querySelector(".composer .formatting-group li[data-format='window-minimize']"),
@@ -664,11 +607,13 @@ function setOrderAndHideAccordingToRemembered(){
     for (const key in FORMATTING_BAR_CUSTOM_ORDER) {
         if (FORMATTING_BAR_CUSTOM_ORDER.hasOwnProperty(key)) {
             const order = Number(FORMATTING_BAR_CUSTOM_ORDER[key]);
-            FORMATTING_BUTTONS[key].style.order = order;
-            if(order === -1){
-                document.querySelector(`#${TOOLBAR_MODAL} ul`).appendChild(FORMATTING_BUTTONS[key]);
-            } else {
-                composerFormatters.appendChild(FORMATTING_BUTTONS[key]);
+            if(FORMATTING_BUTTONS[key]){
+                FORMATTING_BUTTONS[key].style.order = order;
+                if(order === -1){
+                    document.querySelector(`#${TOOLBAR_MODAL} ul`).appendChild(FORMATTING_BUTTONS[key]);
+                } else {
+                    composerFormatters.appendChild(FORMATTING_BUTTONS[key]);
+                }
             }
         }
     }
@@ -903,7 +848,6 @@ function makeFormattingButtonsDroppableOnTo(){
  * Initialise the advanced formatting bar mod
  */
 function initialiseOnComposerOpen(){
-    addEmotePickerButton();
     addSpecialFormattingButtons();
     getReferencesToButtons();
     hookIntoEmotesButton();

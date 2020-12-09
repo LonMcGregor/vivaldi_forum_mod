@@ -347,6 +347,10 @@
         "message": "Topic ID",
         "description": "Custom emotes input field label for the topic id"
     },
+    "customEmoteFirstRun": {
+        "message": "Custom emotes didn't load, please go to settings and reset them.",
+        "description": "Message shown on first run if emotes were not added properly."
+    },
     "storageUse": {
         "message": "Storage Used by custom CSS & custom emotes: ",
         "description": "Label for storage monitor. Appears next to a progress bar"
