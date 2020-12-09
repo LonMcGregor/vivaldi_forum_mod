@@ -240,6 +240,10 @@ function toggleModal(event, modalId){
     }
 }
 
+// TODO add the emotes to emojis
+// TODO use the old insert code for URLs
+// TODO after first upload of a custom emote, replace it with a URL link
+
 /**
  * Creates a modal box that floats on the page
  * @param {string} id of the modal

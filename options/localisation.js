@@ -55,7 +55,10 @@ function localisation() {
     document.getElementById('linkBugs').innerText = chrome.i18n.getMessage('linkBugs');
     document.getElementById('undoMoji').innerText = chrome.i18n.getMessage('undoMoji');
     document.querySelector('#customemotes h2').innerText = chrome.i18n.getMessage('customEmoteTitle');
-    document.querySelector('#customemotes button').innerText = chrome.i18n.getMessage('customEmoteReset');
+    document.getElementById('resetEmotes').innerText = chrome.i18n.getMessage('customEmoteReset');
+    document.querySelector('label[for="selectEmote"]').innerText = chrome.i18n.getMessage('customEmoteFile');
+    document.getElementById('loadEmotesFromTopic').innerText = chrome.i18n.getMessage('customEmoteTopic');
+    document.querySelector('label[for="emoteTopic"]').innerText = chrome.i18n.getMessage('customEmoteTopicId');
     document.getElementById('storageUse').innerText = chrome.i18n.getMessage('storageUse');
 
     //info

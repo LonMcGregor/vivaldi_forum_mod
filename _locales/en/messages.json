@@ -335,6 +335,18 @@
         "message": "Reset Emotes",
         "description": "Custom emotes reset button text"
     },
+    "customEmoteFile": {
+        "message": "Select file(s) to upload",
+        "description": "Custom emotes file picker label"
+    },
+    "customEmoteTopic": {
+        "message": "Load from forum topic",
+        "description": "Custom emotes button load from forum topic"
+    },
+    "customEmoteTopicId": {
+        "message": "Topic ID",
+        "description": "Custom emotes input field label for the topic id"
+    },
     "storageUse": {
         "message": "Storage Used by custom CSS & custom emotes: ",
         "description": "Label for storage monitor. Appears next to a progress bar"
