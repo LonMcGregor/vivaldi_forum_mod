@@ -204,7 +204,6 @@ function w_smod() {
 };
 
     // TODO BUG: Sometimes the custom css is loaded before the rest of the page's css, making it not have priority
-    // TODO mobile header isn't coloured
 
 /* Last edit timestamp to local */
 

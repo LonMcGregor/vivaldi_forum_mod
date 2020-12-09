@@ -346,6 +346,7 @@ function emoteDragStart(dragEvent){
  * @returns DOM element
  */
 function makeEmoteButton(emoteName, emoteUrl){
+    //<a class="emoji-link" name="adult" href="#"><span class="vm-emoji" title=":adult:">🧑</span></a>
     const emoteButton = document.createElement("img");
     emoteButton.alt = emoteName;
     emoteButton.title = emoteName;
@@ -359,12 +360,20 @@ function makeEmoteButton(emoteName, emoteUrl){
  * Create the DOM for a new custom emote
  * @param {[string, string]} emoteData
  * @returns DOM element
+ * Choose a different insert method depending on if it is a data: upload
+ * or referencing an image already uploaded to the forum.
  */
 function makeCustomeEmoteButton(emoteData){
+    //<a class="emoji-link" name="adult" href="#"><span class="vm-emoji" title=":adult:">🧑</span></a>
     const emoteButton = document.createElement("img");
-    emoteButton.src = emoteData[1];
     emoteButton.title = emoteData[0];
-    emoteButton.addEventListener("click", emoteCustomPicked);
+    if(emoteData[1].indexOf("data:")===0){
+        emoteButton.src = emoteData[1];
+        emoteButton.addEventListener("click", emoteCustomPicked);
+    } else {
+        emoteButton.src = "/assets/uploads/files/" + emoteData[1];
+        emoteButton.addEventListener("click", emotePicked);
+    }
     return emoteButton;
 }
 
@@ -393,9 +402,51 @@ function createEmotePicker(){
 }
 
 /**
+ * Add the custom emotes to a special nodebb emote picker tab
+ */
+function addCustomEmotesToNodeBBPicker(){
+    const dialog = document.querySelector("#emoji-dialog");
+    if(!dialog){
+        setTimeout(addCustomEmotesToNodeBBPicker, 500);
+        return;
+    }
+    /* add tab */
+    const tabs = dialog.querySelector("ul.nav");
+    tabs.querySelector("li.active").classList.remove("active");
+    const newtab = document.createElement("li");
+    newtab.className = "active";
+    newtab.setAttribute("role", "presentation");
+    newtab.innerHTML = `<a href="#emoji-tab-emoticons" aria-controls="emoticons" role="tab" data-toggle="tab" data-ajaxify="false" aria-expanded="true">
+      Emoticons
+    </a>`;
+    tabs.insertAdjacentElement("afterbegin", newtab);
+    /* add panel */
+    const panels = dialog.querySelector(".tab-content");
+    panels.querySelector(".tab-pane.active").classList.remove("active");
+    const newpanel = document.createElement("div");
+    newpanel.setAttribute("role", "tabpanel");
+    newpanel.className = "tab-pane active";
+    newpanel.id = "emoji-tab-emoticons";
+    chrome.storage.local.get({"customEmotes": []}, data =>{
+        if(data["customEmotes"].length === 0 || data["customEmotes"] === "[]"){
+            newpanel.innerText = "Custom emotes didn't load, please go to settings and reset them.";
+        } else {
+            var customEmotes = JSON.parse(data["customEmotes"]);
+            customEmotes.forEach(emote => {
+                newpanel.appendChild(makeCustomeEmoteButton(emote));
+            });
+        }
+        panels.insertAdjacentElement("afterbegin", newpanel);
+    });
+    // TODO this works, but the other tabs don't hide the new tab when they are activated. need to use a mutation observer and do it manually.
+}
+
+/**
  * Creates and adds the emote picker button to the message composer's formatting strip
  */
 function addEmotePickerButton(){
+    console.log("hi");
+    debugger;
     const composerFormatters = document.querySelector(".composer .formatting-group");
     const emotePickerButton = document.createElement("li");
     emotePickerButton.setAttribute("tabindex", "-1");
@@ -405,6 +456,11 @@ function addEmotePickerButton(){
     emotePickerButton.addEventListener("click", event => {toggleModal(event, EMOTE_MODAL);});
     emotePickerButton.id = "emote-picker-button";
     composerFormatters.appendChild(emotePickerButton);
+}
+
+/* hijack the real emotes button */
+function hookIntoEmotesButton(){
+    FORMATTING_BUTTONS["emoji-add-emoji"].addEventListener("click", addCustomEmotesToNodeBBPicker);
 }
 
 /* ========Formatting======= */
@@ -850,6 +906,7 @@ function initialiseOnComposerOpen(){
     addEmotePickerButton();
     addSpecialFormattingButtons();
     getReferencesToButtons();
+    hookIntoEmotesButton();
     createToolbarCustomModal();
     makeModalWithHiddenButtonsOpener();
     setOrderAndHideAccordingToRemembered();

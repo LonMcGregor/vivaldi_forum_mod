@@ -26,9 +26,21 @@
 }
 
 /* Style emote picker */
+#emoji-dialog .tab-pane img {
+    max-height: 50px;
+    max-width: 50px;
+}
+
+div#emoji-tab-emoticons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    width: 390px;
+}
+
 #emote-picker img {
     cursor: pointer;
     place-self: center;
+    max-height: 50px;
 }
 
 #emote-picker-button:focus:not(:hover) {
