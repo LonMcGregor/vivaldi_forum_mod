@@ -8,7 +8,7 @@ body {
 
 /* Header */
 
-#vivaldiheader {
+#vivaldiheader, #vivaldi-header {
     background-color: var(--colorBg);
 }
 #vivaldiheader a, #vivaldiheader a:active, #vivaldiheader a:focus, #vivaldiheader a:visited {

@@ -474,6 +474,10 @@ button.deactivated:hover {
     height: 50px;
 }
 
+#emotetable button {
+    float: left;
+}
+
 #emotetable img {
     max-height: 50px;
 }
