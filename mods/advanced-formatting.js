@@ -34,8 +34,7 @@ const DEFAULT_FORMATTING_BAR_CUSTOM_ORDER = {
     "picture-o": 7,
     zen: 8,
     picture: 9,
-    "heart-o": 10,
-    "emoji-add-emoji": 11,
+    "emoji-add-emoji": 10,
     header: -1,
     "window-minimize": -1,
     "quote-right": -1,
@@ -55,8 +54,7 @@ let FORMATTING_BAR_CUSTOM_ORDER = {
     "picture-o": 7,
     zen: 8,
     picture: 9,
-    "heart-o": 10,
-    "emoji-add-emoji": 11,
+    "emoji-add-emoji": 10,
     header: -1,
     "window-minimize": -1,
     "quote-right": -1,
@@ -77,7 +75,6 @@ let FORMATTING_BUTTONS = {
     "picture-o": undefined,
     zen: undefined,
     picture: undefined,
-    "heart-o": undefined,
     "emoji-add-emoji": undefined,
     header: undefined,
     "window-minimize": undefined,
@@ -87,7 +84,6 @@ let FORMATTING_BUTTONS = {
     "list-ol": undefined,
     "shield": undefined
 };
-const EMOTE_MODAL = "emote-picker";
 const TOOLBAR_MODAL = "toolbar-custom";
 /* use a nonce to prevent accidental dnd of text */
 const NONCE = get_random();
@@ -300,7 +296,6 @@ function emotePicked(event){
     event.preventDefault();
     const textarea = document.querySelector(".composer .write");
     if(!textarea){
-        hideModal(EMOTE_MODAL);
         return;
     }
     const newtext = `![${event.target.alt}](${event.target.src} "${event.target.alt}") `;
@@ -315,7 +310,6 @@ function emoteCustomPicked(event){
     event.preventDefault();
     const textarea = document.querySelector(".composer .write");
     if(!textarea){
-        hideModal(EMOTE_MODAL);
         return;
     }
     var datasrc = event.target.src;
@@ -872,7 +866,6 @@ function pageMutated(mutationList){
         });
         mutation.removedNodes.forEach(element => {
             if(element.classList.contains("composer")){
-                hideModal(EMOTE_MODAL);
                 destroyModal(TOOLBAR_MODAL);
             }
         });
