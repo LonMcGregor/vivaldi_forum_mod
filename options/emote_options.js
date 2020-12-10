@@ -81,7 +81,7 @@ document.getElementById('advancedFormatting').addEventListener("click", e => {
 /** auxiliary function to use with array sorting */
 function sortEmotesByName(x,y) {
     if(x[0] > y[0]){return 1}
-    if(x[0] == y[0]){return 0}
+    if(x[0] === y[0]){return 0}
     if(x[0] < y[0]){return -1}
 }
 
@@ -128,7 +128,10 @@ function updateStorageMonitor(){
  */
 function loadCustomEmotes(){
     chrome.storage.local.get({"customEmotes": []}, data =>{
-        let emotetable = document.querySelector("#emotetable");
+        let customemotes = document.querySelector("#customemotes");
+        customemotes.removeChild(document.querySelector("#emotetable"));
+        let emotetable = document.createElement("div");
+        emotetable.id = "emotetable";
         let emotebutton = document.querySelector("#emotetable button");
         customEmotes = JSON.parse(data["customEmotes"]);
         customEmotes.forEach(emote => {
@@ -143,6 +146,7 @@ function loadCustomEmotes(){
             emotediv.appendChild(emoteimg);
             emotetable.insertBefore(emotediv, emotebutton);
         });
+        customemotes.appendChild(emotetable);
         updateStorageMonitor();
     });
 
@@ -203,15 +207,24 @@ async function loadFromURL(topic){
         sleep(500);
     }
     topic_emotes.forEach(emote => {
-        /* don't allow dupes of same name */
-        if(customEmotes.some(x => x[0]===emote[0])){
-            console.warn("Emote already added. Skipping "+emote[0]);
-        } else {
-            customEmotes.push([emote[0], emote[1]]);
+        /* bin search sorted emotes(faster than array.some())
+        and only add if not already exists*/
+        let lower = 0;
+        let middle;
+        let upper = customEmotes.length-1;
+
+        while(lower <= upper){
+            middle = Math.floor((upper + lower)/2);
+            if(customEmotes[middle][0]===emote[0]){
+                return;
+            } else if(customEmotes[middle][0] > emote[0]){
+                upper = middle - 1;
+            } else {
+                lower = middle + 1;
+            }
         }
+        customEmotes.splice(lower, 0, emote);
     });
-    /* sort everything */
-    customEmotes.sort(sortEmotesByName);
     chrome.storage.local.set({"customEmotes": JSON.stringify(customEmotes)}, () => {
         eraseEmoteTable()
         loadCustomEmotes();
