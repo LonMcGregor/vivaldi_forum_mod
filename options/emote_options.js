@@ -205,6 +205,7 @@ async function loadFromURL(topic){
         });
         /* throttle to not overload the forum */
         sleep(500);
+        page++;
     }
     topic_emotes.forEach(emote => {
         /* bin search sorted emotes(faster than array.some())
