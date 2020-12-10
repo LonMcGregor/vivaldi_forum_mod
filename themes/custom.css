@@ -1,6 +1,6 @@
 /** Custom Theme **/
 
-body {
+body, #panel {
     background-color: var(--colorBg) !important;
     color: var(--colorFg);
 }

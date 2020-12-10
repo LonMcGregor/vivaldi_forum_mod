@@ -203,8 +203,6 @@ function w_smod() {
     }, 700);
 };
 
-    // TODO BUG: Sometimes the custom css is loaded before the rest of the page's css, making it not have priority
-
 /* Last edit timestamp to local */
 
 function tolocalISO(date) {
