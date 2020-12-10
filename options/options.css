@@ -32,7 +32,7 @@ header {
 #themes-btn {
     margin-left: 70px;
 }
-#themes-btn, #modifications-btn, #info-btn, #feedback-btn, #reset-btn {
+#themes-btn, #modifications-btn, #customemotes-btn, #info-btn, #feedback-btn, #reset-btn {
     color: hsl(0, 0%, 37%);
     cursor: default;
     background: none;
@@ -46,7 +46,7 @@ header {
     padding: 0 8px;
     cursor: pointer;
 }
-#themes-btn:hover, #modifications-btn:hover, #info-btn:hover, #feedback-btn:hover, #reset-btn:hover, .view {
+#themes-btn:hover, #modifications-btn:hover, #customemotes-btn:hover, #info-btn:hover, #feedback-btn:hover, #reset-btn:hover, .view {
     color: #d01126 !important;
 }
 form {
@@ -152,7 +152,7 @@ h2 {
 strong, a {
     color: #d01126;
 }
-#modifications, #info {
+#modifications, #customemotes, #info {
     display: none;
 }
 
@@ -462,7 +462,8 @@ button.deactivated:hover {
 /* custom emotes */
 #emotetable {
     display: grid;
-    grid-template-columns: 5fr 5fr 5fr 5fr 5fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    margin-top: 10px;
 }
 
 #emotetable input {
@@ -480,4 +481,9 @@ button.deactivated:hover {
 
 #emotetable img {
     max-height: 50px;
+    max-width: 70px;
+}
+
+#storagemonitor {
+    margin-top: 20px;
 }

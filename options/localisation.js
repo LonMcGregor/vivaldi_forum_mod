@@ -4,6 +4,7 @@ function localisation() {
 
     document.getElementById('themes-btn').innerText = chrome.i18n.getMessage('themes');
     document.getElementById('modifications-btn').innerText = chrome.i18n.getMessage('modifications');
+    document.getElementById('customemotes-btn').innerText = chrome.i18n.getMessage('customEmoteTitle');
     document.getElementById('info-btn').innerText = chrome.i18n.getMessage('info');
     document.getElementById('feedback-btn').innerText = chrome.i18n.getMessage('feedback');
     document.getElementById('reset-btn').innerText = chrome.i18n.getMessage('reset');
@@ -56,7 +57,6 @@ function localisation() {
     document.getElementById('undoMoji').innerText = chrome.i18n.getMessage('undoMoji');
     document.querySelector('#customemotes h2').innerText = chrome.i18n.getMessage('customEmoteTitle');
     document.getElementById('resetEmotes').innerText = chrome.i18n.getMessage('customEmoteReset');
-    document.querySelector('label[for="selectEmote"]').innerText = chrome.i18n.getMessage('customEmoteFile');
     document.getElementById('loadEmotesFromTopic').innerText = chrome.i18n.getMessage('customEmoteTopic');
     document.querySelector('label[for="emoteTopic"]').innerText = chrome.i18n.getMessage('customEmoteTopicId');
     document.getElementById('storageUse').innerText = chrome.i18n.getMessage('storageUse');

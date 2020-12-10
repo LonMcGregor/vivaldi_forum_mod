@@ -303,21 +303,6 @@ function emotePicked(event){
 }
 
 /**
- * User clicked on a new custom emote
- * @param {MouseEvent} event mouse click
- */
-function emoteCustomPicked(event){
-    event.preventDefault();
-    const textarea = document.querySelector(".composer .write");
-    if(!textarea){
-        return;
-    }
-    var datasrc = event.target.src;
-    var datatitle = event.target.title;
-    uploadContentFiles(datasrc, datatitle);
-}
-
-/**
  * Create the DOM for a new custom emote
  * @param {[string, string]} emoteData
  * @returns DOM element
@@ -327,13 +312,8 @@ function emoteCustomPicked(event){
 function makeCustomeEmoteButton(emoteData){
     const emoteButton = document.createElement("img");
     emoteButton.title = emoteData[0];
-    if(emoteData[1].indexOf("data:")===0){
-        emoteButton.src = emoteData[1];
-        emoteButton.addEventListener("click", emoteCustomPicked);
-    } else {
-        emoteButton.src = "/assets/uploads/files/" + emoteData[1];
-        emoteButton.addEventListener("click", emotePicked);
-    }
+    emoteButton.src = "/assets/uploads/files/" + emoteData[1];
+    emoteButton.addEventListener("click", emotePicked);
     return emoteButton;
 }
 

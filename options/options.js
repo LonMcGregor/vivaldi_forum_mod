@@ -210,6 +210,7 @@ function _showThemes() {
     btnThemes.classList.add('view');
     navThemes.style.display = 'block';
     navModifications.style.display = 'none';
+    navEmotes.style.display = 'none';
     navInfo.style.display = 'none';
     status.style.opacity = '0';
     status.innerText = chrome.i18n.getMessage('statusThemes');
@@ -220,6 +221,7 @@ function _showModifications() {
     btnModifications.classList.add('view');
     navThemes.style.display = 'none';
     navModifications.style.display = 'block';
+    navEmotes.style.display = 'none';
     navInfo.style.display = 'none';
     status.style.opacity = '0';
     status.innerText = chrome.i18n.getMessage('statusModifications');
@@ -230,7 +232,19 @@ function _showInfo() {
     btnInfo.classList.add('view');
     navThemes.style.display = 'none';
     navModifications.style.display = 'none';
+    navEmotes.style.display = 'none';
     navInfo.style.display = 'block';
+    status.style.opacity = '0';
+    status.innerText = chrome.i18n.getMessage('statusInfo');
+    _fade();
+};
+function _showEmotes() {
+    document.querySelector('.view').removeAttribute('class');
+    navEmotes.classList.add('view');
+    navThemes.style.display = 'none';
+    navModifications.style.display = 'none';
+    navInfo.style.display = 'none';
+    navEmotes.style.display = 'block';
     status.style.opacity = '0';
     status.innerText = chrome.i18n.getMessage('statusInfo');
     _fade();
@@ -239,6 +253,8 @@ function _showInfo() {
 
 const navThemes = document.getElementById('themes');
 const navModifications = document.getElementById('modifications');
+const navEmotes = document.getElementById('customemotes');
+const btnEmotes = document.getElementById('customemotes-btn');
 const navInfo = document.getElementById('info');
 const btnThemes = document.getElementById('themes-btn');
 const btnModifications = document.getElementById('modifications-btn');
@@ -254,6 +270,7 @@ var changeMessage = false;
 btnThemes.addEventListener('click', _showThemes);
 btnModifications.addEventListener('click', _showModifications);
 btnInfo.addEventListener('click', _showInfo);
+btnEmotes.addEventListener('click', _showEmotes);
 selectMods.forEach(function(mod) {
     mod.addEventListener('click', _selectMods);
 });

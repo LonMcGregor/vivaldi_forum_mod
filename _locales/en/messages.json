@@ -328,20 +328,20 @@
         "description": "Mod: turn emoji images back into native text"
     },
     "customEmoteTitle": {
-        "message": "Custom Emotes (Advanced Formatting)",
+        "message": "Custom Emotes",
         "description": "Custom emotes section title"
     },
     "customEmoteReset": {
         "message": "Reset Emotes",
-        "description": "Custom emotes reset button text"
-    },
-    "customEmoteFile": {
-        "message": "Select file(s) to upload",
-        "description": "Custom emotes file picker label"
+        "description": "Custom emotes reset button text. shows on button."
     },
     "customEmoteTopic": {
         "message": "Load from forum topic",
         "description": "Custom emotes button load from forum topic"
+    },
+    "customEmoteResetMsg": {
+        "message": "Erase all emotes and reset defaults?",
+        "description": "Custom emotes reset confirmation message. shows in a confirm()"
     },
     "customEmoteTopicId": {
         "message": "Topic ID",
