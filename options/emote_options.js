@@ -118,9 +118,10 @@ function resetEmotes(userInitiated){
  * LOCAL: 5,242,880 total
  */
 function updateStorageMonitor(){
-    chrome.storage.local.getBytesInUse(null, bytesInUse => {
-        document.querySelector("#storagemonitor progress").value = bytesInUse;
-    });
+    return;
+    // chrome.storage.local.getBytesInUse(null, bytesInUse => {
+    //    document.querySelector("#storagemonitor progress").value = bytesInUse;
+    //});
 }
 
 /**

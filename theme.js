@@ -1,11 +1,31 @@
-/* Theme */
+/* Load stylesheets */
+
+function loadFile(filename, id) {
+    let head = document.getElementsByTagName('head')[0];
+    let check = document.getElementById('vfmUSERCSS');
+    let style = document.createElement('link');
+    if (id) {
+        style.setAttribute('id', id);
+    }
+    style.setAttribute('rel', 'stylesheet');
+    style.setAttribute('type', 'text/css');
+    style.setAttribute('href', chrome.extension.getURL(filename));
+    if (check) {
+        head.insertBefore(style, check);
+    }
+    else {
+        head.appendChild(style);
+    }
+};
+
+
+/* Wait function */
 
 function _async() {
     return new Promise(resolve => {
         requestAnimationFrame(resolve);
     });
 };
-
 async function _wait() {
     while (!document.body) {
         await _async()
@@ -13,181 +33,88 @@ async function _wait() {
     return true;
 };
 
-function _logoWhite() {
-    var getLogoWhite = document.createElement('link');
-    getLogoWhite.href = chrome.extension.getURL('themes/logo-white.css');
-    getLogoWhite.type = 'text/css';
-    getLogoWhite.rel = 'stylesheet';
-    document.getElementsByTagName('head')[0].appendChild(getLogoWhite);
-};
 
-function _logoBlack() {
-    var getLogoBlack = document.createElement('link');
-    getLogoBlack.href = chrome.extension.getURL('themes/logo-black.css');
-    getLogoBlack.type = 'text/css';
-    getLogoBlack.rel = 'stylesheet';
-    document.getElementsByTagName('head')[0].appendChild(getLogoBlack);
-};
+/* Load Theme */
 
-
-chrome.storage.sync.get({
-    'darkGrey': '',
-    'lightGrey': '',
-    'mod': '',
-    'sprucey': '',
-    'custom': '',
-    'cssToggle': '',
-    'compact': '',
-    'logoWhite': '',
-    'colorBg': '#fdf6e3',
-    'colorFg': '#586e75',
-    'colorHi': '#d33682',
-    'colorBtn': '#6c71c4',
-    'colorDrop': '#eee8d5',
-    'colorLi': '#b58900',
-    'colorLi2': '#2aa198',
-    'colorDropFg': '#121212',
-    'colorDropHi': '#d6d1c0',
-    'colorDropHi2': '#bebaaa',
-    'colorDropHi3': '#a7a295',
-    'colorDropHiG': '#d1d1d1',
-    'colorBgHi': '#e4ddcc',
-    'colorBgHiC': '#f0ead8',
-    'colorBgHiCG': '#eaeaea',
-    'colorBgHiG': '#dddddd',
-    'colorBgHiG2': '#c0c0c0',
-    'colorFg2': '#8e8e8e',
-    'colorHiFg': '#fbfbfb',
-    'colorLiHi': '#9f7900',
-    'colorLiR': '#7e7e7e',
-    'colorLi2Hi': '#258e86',
-    'colorBtnHi': '#7b7fca',
-    'colorBtnFg': '#fbfbfb'
-},
-function(theme) {
-    //header
-    if (theme.darkGrey === '1' || theme.lightGrey === '1' || theme.mod === '1' || theme.sprucey === '1') {
-        if (theme.compact === '1' || theme.darkGrey === '1' || theme.lightGrey === '1') {
-            var compactHeaderAlt = document.createElement('link');
-            compactHeaderAlt.href = chrome.extension.getURL('mods/compact-header-alt.css');
-            compactHeaderAlt.type = 'text/css';
-            compactHeaderAlt.rel = 'stylesheet';
-            document.getElementsByTagName('head')[0].appendChild(compactHeaderAlt);
+function loadTheme() {
+    chrome.storage.sync.get({'VFM_CURRENT_THEME': ''}, function(get) {
+        let theme = get.VFM_CURRENT_THEME.selected;
+        if (theme.startsWith('vfm_')) {
+            _wait().then(() => {
+                let colors = get.VFM_CURRENT_THEME.colors;
+                for (const [key, value] of Object.entries(colors)) {
+                    document.body.style.setProperty('--' + key, value);
+                }
+            });
+            loadFile('themes/custom.css', 'vfmTheme');
         }
         else {
-            var standardHeaderAlt = document.createElement('link');
-            standardHeaderAlt.href = chrome.extension.getURL('mods/standard-header-alt.css');
-            standardHeaderAlt.type = 'text/css';
-            standardHeaderAlt.rel = 'stylesheet';
-            document.getElementsByTagName('head')[0].appendChild(standardHeaderAlt);
+            loadFile('themes/standard.css', 'vfmTheme');
         }
-    }
-    else {
-        if (theme.compact === '1') {
-            var compactHeader = document.createElement('link');
-            compactHeader.href = chrome.extension.getURL('mods/compact-header.css');
-            compactHeader.type = 'text/css';
-            compactHeader.rel = 'stylesheet';
-            document.getElementsByTagName('head')[0].appendChild(compactHeader);
-        }
-        else {
-            var standardHeader = document.createElement('link');
-            standardHeader.href = chrome.extension.getURL('mods/standard-header.css');
-            standardHeader.type = 'text/css';
-            standardHeader.rel = 'stylesheet';
-            document.getElementsByTagName('head')[0].appendChild(standardHeader);
-        }
-    }
-    //logo
-    if (theme.sprucey === '1' || theme.lightGrey === '1' || theme.darkGrey === '1') {
-        _logoWhite();
-    }
-    if (theme.custom === '1' ) {
-        if (theme.logoWhite === '1') {
-            _logoWhite();
-        }
-        else {
-            _logoBlack();
-        }
-    }
-    //themes
-    if (theme.custom === '1') {
+        // introduce theme name as class in body
         _wait().then(() => {
-            document.body.style.setProperty('--colorBg', theme.colorBg);
-            document.body.style.setProperty('--colorFg', theme.colorFg);
-            document.body.style.setProperty('--colorHi', theme.colorHi);
-            document.body.style.setProperty('--colorBtn', theme.colorBtn);
-            document.body.style.setProperty('--colorDrop', theme.colorDrop);
-            document.body.style.setProperty('--colorLi', theme.colorLi);
-            document.body.style.setProperty('--colorLi2', theme.colorLi2);
-            document.body.style.setProperty('--colorDropFg', theme. colorDropFg);
-            document.body.style.setProperty('--colorDropHi', theme. colorDropHi);
-            document.body.style.setProperty('--colorDropHi2', theme. colorDropHi2);
-            document.body.style.setProperty('--colorDropHi3', theme. colorDropHi3);
-            document.body.style.setProperty('--colorDropHiG', theme. colorDropHiG);
-            document.body.style.setProperty('--colorBgHi', theme.colorBgHi);
-            document.body.style.setProperty('--colorBgHiC', theme.colorBgHiC);
-            document.body.style.setProperty('--colorBgHiCG', theme. colorBgHiCG);
-            document.body.style.setProperty('--colorBgHiG', theme.colorBgHiG);
-            document.body.style.setProperty('--colorBgHiG2', theme. colorBgHiG2);
-            document.body.style.setProperty('--colorFg2', theme.colorFg2);
-            document.body.style.setProperty('--colorHiFg', theme.colorHiFg);
-            document.body.style.setProperty('--colorLiHi', theme.colorLiHi);
-            document.body.style.setProperty('--colorLiR', theme.colorLiR);
-            document.body.style.setProperty('--colorLi2Hi', theme.colorLi2Hi);
-            document.body.style.setProperty('--colorBtnHi', theme.colorBtnHi);
-            document.body.style.setProperty('--colorBtnFg', theme.colorBtnFg);
+            document.body.classList.add(theme);
         });
-        var themeCustom = document.createElement('link');
-        themeCustom.href = chrome.extension.getURL('themes/custom.css');
-        themeCustom.type = 'text/css';
-        themeCustom.rel = 'stylesheet';
-        document.getElementsByTagName('head')[0].appendChild(themeCustom);
+    });
+};
+
+
+/* Load User CSS */
+
+function loadUserCSS() {
+    chrome.storage.sync.get({'VFM_USER_CSS': ''}, function(get) {
+        if (get.VFM_USER_CSS === true) {
+            chrome.storage.local.get({'userCSS': ''}, function(local) {
+                if (local.userCSS !== '') {
+                    let activateUserCSS = document.createElement('style');
+                    activateUserCSS.id = 'vfmUSERCSS';
+                    activateUserCSS.type = 'text/css';
+                    activateUserCSS.innerHTML = local.userCSS;
+                    document.getElementsByTagName('head')[0].appendChild(activateUserCSS);
+                }
+            });
+        }
+    });
+};
+
+
+/* Update Tab */
+
+function updateTheme() {
+    let theme = document.getElementById('vfmTheme');
+    if (theme) {
+        theme.disabled = true;
+        theme.parentNode.removeChild(theme);
     }
-    else if (theme.darkGrey === '1') {
-        var themeDarkGrey = document.createElement('link');
-        themeDarkGrey.href = chrome.extension.getURL('themes/dark-grey.css');
-        themeDarkGrey.type = 'text/css';
-        themeDarkGrey.rel = 'stylesheet';
-        document.getElementsByTagName('head')[0].appendChild(themeDarkGrey);
+    document.body.className = document.body.className.replace(/(^|\s)vfm\S+/g,'');
+    loadTheme();
+}
+
+function updateUserCSS() {
+    let del = document.getElementById('vfmUSERCSS');
+    if (del) {
+        del.disabled = true;
+        del.parentNode.removeChild(del);
     }
-    else if (theme.lightGrey === '1') {
-        var themeLightGrey = document.createElement('link');
-        themeLightGrey.href = chrome.extension.getURL('themes/light-grey.css');
-        themeLightGrey.type = 'text/css';
-        themeLightGrey.rel = 'stylesheet';
-        document.getElementsByTagName('head')[0].appendChild(themeLightGrey);
+    loadUserCSS();
+};
+
+loadTheme();
+loadUserCSS();
+chrome.runtime.sendMessage({message: 'whoami'}, function() {
+    if (chrome.runtime.lastError) {
+        setTimeout(function() {
+            chrome.runtime.sendMessage({message: 'whoami'});
+        }, 3000);
     }
-    else if (theme.mod === '1') {
-        var themeMod = document.createElement('link');
-        themeMod.href = chrome.extension.getURL('themes/mod.css');
-        themeMod.type = 'text/css';
-        themeMod.rel = 'stylesheet';
-        document.getElementsByTagName('head')[0].appendChild(themeMod);
+});
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.message === 'update theme') {
+        updateTheme();
+        sendResponse({message: 'akn'});
     }
-    else if (theme.sprucey === '1') {
-        var themeSprucey = document.createElement('link');
-        themeSprucey.href = chrome.extension.getURL('themes/sprucey-bonus-dark.css');
-        themeSprucey.type = 'text/css';
-        themeSprucey.rel = 'stylesheet';
-        document.getElementsByTagName('head')[0].appendChild(themeSprucey);
-    }
-    else {
-        var themeStandard = document.createElement('link');
-        themeStandard.href = chrome.extension.getURL('themes/standard.css');
-        themeStandard.type = 'text/css';
-        themeStandard.rel = 'stylesheet';
-        document.getElementsByTagName('head')[0].appendChild(themeStandard);
-    }
-    // user css
-    if (theme.cssToggle === '1') {
-        chrome.storage.local.get({'userCSS': ''}, function(local) {
-            if (local.userCSS !== '') {
-                var activateUserCSS = document.createElement('style');
-                activateUserCSS.type = 'text/css';
-                activateUserCSS.innerHTML = local.userCSS;
-                document.getElementsByTagName('head')[0].appendChild(activateUserCSS);
-            }
-        });
+    if (request.message === 'change usercss') {
+        updateUserCSS();
+        sendResponse({message: 'akn'});
     }
 });

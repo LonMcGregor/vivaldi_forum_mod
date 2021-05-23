@@ -1,5 +1,62 @@
 "use strict";
 
+/* ==========Globals=============*/
+const EMOTES = {
+    alien:"1539692482285-alien.gif",
+    angel:"1539692493644-angel.gif",
+    awww:"1539692536730-awww.gif",
+    banana:"1539692630638-banana.gif",
+    beer:"1539692709259-beer.gif",
+    bigeyes:"1539692683566-bigeyes.gif",
+    bigsmile:"1539687021352-bigsmile.gif",
+    blush:"1539687052167-blush.gif",
+    bomb:"1539692948902-bomb.gif",
+    bug:"1539685604359-bug.gif",
+    bye:"1539692998605-bye.gif",
+    cat:"1539693028753-cat.gif",
+    cheers:"1539698180973-cheers.gif",
+    chef:"https://forum.vivaldi.net/assets/uploads/files/1620378615905-1162cfde-2319-4b5f-8ebe-4cc9d50ce99f-image.png",
+    coffee:"1539685551254-coffee.gif",
+    confused:"1539685266409-confused.gif",
+    cool:"1539693137735-cool.gif",
+    detective:"1539693179226-detective.gif",
+    devil:"1539693232474-devil.gif",
+    doh:"1539685506587-doh.gif",
+    drunk:"1539693282716-drunk.gif",
+    eek:"1539693323529-eek.gif",
+    faint:"1539693390072-faint.gif",
+    flirt:"1539685662035-flirt.gif",
+    frown:"1539685209586-frown.gif",
+    furious:"1539685719517-furious.gif",
+    haha:"1539685426101-haha.gif",
+    headbang:"1539686921747-headbang.gif",
+    idea:"1539686816525-idea.gif",
+    irked:"1539698254681-irked.gif",
+    jester:"1539685753306-jester.gif",
+    lookleft:"1539698335612-left.gif",
+    lookright:"1539698359299-right.gif",
+    mad:"1539698407597-mad.gif",
+    no:"1539686722752-no.gif",
+    party:"1539698651945-party.gif",
+    pingu:"1539685811063-pingu.gif",
+    rip:"1539693574973-rip.gif",
+    rolleyes:"1539693612367-rolleyes.gif",
+    smile:"1539685039446-smile.gif",
+    spock:"1539685852804-spock.gif",
+    thumbsdown:"1539693743513-thumbsdown.gif",
+    thumbsup:"1539693760607-thumbsup.gif",
+    troll:"1539685894751-troll.gif",
+    waiting:"1539685920932-waiting.gif",
+    weeping:"1539685954572-weeping.gif",
+    whistle:"1539698509979-whistle.gif",
+    wink:"1539698493281-wink.gif",
+    wizard:"1539685980783-wizard.gif",
+    worried:"1539698551154-worried.gif",
+    yes:"1539686029165-yes.gif",
+    zipped:"1539685367819-zipped.gif",
+    zzz:"1539685301665-zzz.gif"
+};
+const STATIC_URL = "https://lonm.vivaldi.net/wp-content/uploads/sites/1533/2018/10/";
 let DRAG_START_POS = {x:0, y:0};
 /**
  * Keep a reference to the list button used to simulte clicks on hidden elements
@@ -311,8 +368,10 @@ function emotePicked(event){
  */
 function makeCustomeEmoteButton(emoteData){
     const emoteButton = document.createElement("img");
-    emoteButton.title = emoteData[0];
-    emoteButton.src = "/assets/uploads/files/" + emoteData[1];
+    emoteButton.alt = emoteName;
+    emoteButton.title = emoteName;
+    if (emoteName === "chef") emoteButton.src = emoteUrl;
+    else emoteButton.src = STATIC_URL + emoteUrl;
     emoteButton.addEventListener("click", emotePicked);
     return emoteButton;
 }
@@ -567,7 +626,7 @@ function createToolbarCustomModal(){
  * Save the current global order variable to storage
  */
 function saveToolbarOrder(){
-    chrome.storage.sync.set({formattingToolbar: FORMATTING_BAR_CUSTOM_ORDER});
+    chrome.storage.sync.set({VFM_FORMAT: FORMATTING_BAR_CUSTOM_ORDER});
 }
 
 /**
@@ -907,12 +966,12 @@ async function simulateImageDrop(){
  * Init the mod
  */
 chrome.storage.sync.get({
-    advancedFormatting: "",
-    formattingToolbar: FORMATTING_BAR_CUSTOM_ORDER
+    VFM_MODS: "",
+    VFM_FORMAT: FORMATTING_BAR_CUSTOM_ORDER
 }, settings => {
-    if(settings.advancedFormatting==="1"){
+    if(settings.VFM_MODS.advancedFormatting===true){
         const composerObserver = new MutationObserver(pageMutated);
         composerObserver.observe(document.body, {childList: true});
-        FORMATTING_BAR_CUSTOM_ORDER = settings.formattingToolbar;
+        FORMATTING_BAR_CUSTOM_ORDER = settings.VFM_FORMAT;
     }
 });

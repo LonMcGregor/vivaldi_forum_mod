@@ -1,342 +1,63 @@
-/* Activate Theme */
-
-function _activateTheme(){
-    var colorBg = _colorBg.value;
-    var colorFg = _colorFg.value;
-    var colorHi = _colorHi.value;
-    var colorBtn = _colorBtn.value;
-    var colorDrop = _colorDrop.value;
-    var colorLi = _colorLi.value;
-    var colorLi2 = _colorLi2.value;
-
-    // calculate automatic colors
-    function lum(color) {
-        var colorL = color.substring(1);
-        var rgb = parseInt(colorL, 16);
-        var r = (rgb >> 16) & 0xff;
-        var g = (rgb >>  8) & 0xff;
-        var b = (rgb >>  0) & 0xff;
-        return Math.round(0.2126*r+0.7152*g+0.0722*b);
-    };
-    function gray(color) {
-        var colorG = color.substring(1);
-        var rgb = parseInt(colorG, 16);
-        var r = (rgb >> 16) & 0xff;
-        var g = (rgb >>  8) & 0xff;
-        var b = (rgb >>  0) & 0xff;
-        var c = Math.round(0.30*r+0.59*g+0.11*b);
-        return "#"+(0x1000000+c*0x10000+c*0x100+c).toString(16).slice(1);
-    };
-    function shade(color, percent) {
-        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
-        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
-    };
-    // dropdown
-    var drop = lum(colorDrop);
-    if (drop < 130) {
-        var colorDropFg = '#fbfbfb';
-        var colorDropHi = shade(colorDrop, 0.2);
-        var colorDropHi2 = shade(colorDrop, 0.3);
-        var colorDropHi3 = shade(colorDrop, 0.5);
-    }
-    else {
-        var colorDropFg = '#121212';
-        var colorDropHi = shade(colorDrop, -0.1);
-        var colorDropHi2 = shade(colorDrop, -0.2);
-        var colorDropHi3 = shade(colorDrop, -0.3);
-    }
-    var colorDropHiG = gray(colorDropHi);
-    // background
-    var bg = lum(colorBg);
-    var bg2 = gray(colorBg);
-    if (bg < 130) {
-        var colorBgHiG = shade(bg2, 0.2);
-        var colorBgHiG2 = shade(bg2, 0.4);
-        var colorBgHi = shade(colorBg, 0.2);
-        var colorBgHiC = shade(colorBg, 0.1);
-        var colorBgHiCG = shade(bg2, 0.1);
-        var logoWhite = '1';
-    }
-    else {
-        var colorBgHiG = shade(bg2, -0.1);
-        var colorBgHiG2 = shade(bg2, -0.22);
-        var colorBgHi = shade(colorBg, -0.1);
-        var colorBgHiC = shade(colorBg, -0.05);
-        var colorBgHiCG = shade(bg2, -0.05);
-        var logoWhite = '0';
-    }
-    // foreground
-    var fg = lum(colorFg);
-    var fg2 = gray(colorFg);
-    if (fg < 130) {
-        var colorFg2 = shade(fg2, 0.25);
-    }
-    else {
-        var colorFg2 = shade(fg2, -0.1);
-    }
-    // highlight
-    var hi = lum(colorHi);
-    if (hi < 130) {
-        var colorHiFg = '#fbfbfb';
-    }
-    else {
-        var colorHiFg = '#121212';
-    }
-    // link
-    var link = lum(colorLi);
-    var linkR = gray(colorLi);
-    if (link < 130) {
-        var colorLiHi = shade(colorLi, 0.25);
-        var colorLiR = shade(linkR, 0.25);
-    }
-    else {
-        var colorLiHi = shade(colorLi, -0.12);
-        var colorLiR = shade(linkR, -0.07);
-    }
-    // link2
-    var link2 = lum(colorLi2);
-    if (link2 < 130) {
-        var colorLi2Hi = shade(colorLi2, 0.25);
-    }
-    else {
-        var colorLi2Hi = shade(colorLi2, -0.12);
-    }
-    // button
-    var btn = lum(colorBtn);
-    if (btn < 130) {
-        var colorBtnHi = shade(colorBtn, 0.1);
-        var colorBtnFg = '#fbfbfb';
-    }
-    else {
-        var colorBtnHi = shade(colorBtn, -0.07);
-        var colorBtnFg = '#121212';
-    }
-    // store custom theme
-    chrome.storage.sync.set({
-        'logoWhite': logoWhite,
-        'colorBg': colorBg,
-        'colorFg': colorFg,
-        'colorHi': colorHi,
-        'colorBtn': colorBtn,
-        'colorDrop': colorDrop,
-        'colorLi': colorLi,
-        'colorLi2': colorLi2,
-        'colorDropFg': colorDropFg,
-        'colorDropHi': colorDropHi,
-        'colorDropHi2': colorDropHi2,
-        'colorDropHi3': colorDropHi3,
-        'colorDropHiG': colorDropHiG,
-        'colorBgHi': colorBgHi,
-        'colorBgHiC': colorBgHiC,
-        'colorBgHiCG': colorBgHiCG,
-        'colorBgHiG': colorBgHiG,
-        'colorBgHiG2': colorBgHiG2,
-        'colorFg2': colorFg2,
-        'colorHiFg': colorHiFg,
-        'colorLiHi': colorLiHi,
-        'colorLiR': colorLiR,
-        'colorLi2Hi': colorLi2Hi,
-        'colorBtnHi': colorBtnHi,
-        'colorBtnFg': colorBtnFg
-    });
-};
-
-
 /* Restore Themes */
 
 function _restoreThemes() {
     chrome.storage.sync.get({
-        'darkGrey': '',
-        'lightGrey': '',
-        'mod': '',
-        'sprucey': '',
-        'custom1': '',
-        'c1Name': 'Dracula',
-        'c1Bg': '#282a36',
-        'c1Fg': '#f8f8f2',
-        'c1Hi': '#e2d774',
-        'c1Btn': '#6176A5',
-        'c1Drop': '#455182',
-        'c1Li': '#f279d0',
-        'c1Li2': '#8ce2f6',
-        'custom2': '',
-        'c2Name': 'Neon',
-        'c2Bg': '#f6f6f6',
-        'c2Fg': '#2f3136',
-        'c2Hi': '#fd3563',
-        'c2Btn': '#e3ff00',
-        'c2Drop': '#2f3136',
-        'c2Li': '#128e9d',
-        'c2Li2': '#0062ff',
-        'custom3': '',
-        'c3Name': 'Solarized Light',
-        'c3Bg': '#fdf6e3',
-        'c3Fg': '#586e75',
-        'c3Hi': '#d33682',
-        'c3Btn': '#6c71c4',
-        'c3Drop': '#eee8d5',
-        'c3Li': '#b58900',
-        'c3Li2': '#2aa198',
-        'custom4': '',
-        'c4Name': 'Blau',
-        'c4Bg': '#23273b',
-        'c4Fg': '#d4efff',
-        'c4Hi': '#ffffff',
-        'c4Btn': '#68a2f2',
-        'c4Drop': '#d4efff',
-        'c4Li': '#96ffe0',
-        'c4Li2': '#d5d0fc',
+       'VFM_CURRENT_THEME': '',
+       'VFM_THEMES': ''
     },
-    function(restore) {
-        c1Name = restore.c1Name;
-        c1Bg = restore.c1Bg;
-        c1Fg = restore.c1Fg;
-        c1Hi = restore.c1Hi;
-        c1Btn = restore.c1Btn;
-        c1Drop = restore.c1Drop;
-        c1Li = restore.c1Li;
-        c1Li2 = restore.c1Li2;
-        c2Name = restore.c2Name;
-        c2Bg = restore.c2Bg;
-        c2Fg = restore.c2Fg;
-        c2Hi = restore.c2Hi;
-        c2Btn = restore.c2Btn;
-        c2Drop = restore.c2Drop;
-        c2Li = restore.c2Li;
-        c2Li2 = restore.c2Li2;
-        c3Name = restore.c3Name;
-        c3Bg = restore.c3Bg;
-        c3Fg = restore.c3Fg;
-        c3Hi = restore.c3Hi;
-        c3Btn = restore.c3Btn;
-        c3Drop = restore.c3Drop;
-        c3Li = restore.c3Li;
-        c3Li2 = restore.c3Li2;
-        c4Name = restore.c4Name;
-        c4Bg = restore.c4Bg;
-        c4Fg = restore.c4Fg;
-        c4Hi = restore.c4Hi;
-        c4Btn = restore.c4Btn;
-        c4Drop = restore.c4Drop;
-        c4Li = restore.c4Li;
-        c4Li2 = restore.c4Li2;
+    function(get) {
+        var vct = get.VFM_CURRENT_THEME;
+        var vt = get.VFM_THEMES;
+        vt.forEach(function(theme) {
+            const btn = document.createElement('button');
+            const name = theme.themeName;
+            btn.id = name;
+            btn.classList.add('themebox');
+            btn.innerHTML = '<div class="themebox-image"><svg xmlns="http://www.w3.org/2000/svg" width="110" height="76" viewBox="0 0 110 76"><rect fill="var(--colorBg)" x="0" y="0" width="110" height="76"></rect><rect fill="var(--colorAc)" x="0" y="14" width="110" height="12"></rect><rect fill="var(--colorDd)" x="85" y="26" width="25" height="50"></rect><rect fill="var(--colorCo)" x="6" y="32" width="15" height="5"></rect><rect fill="var(--colorHi)" x="23" y="32" width="15" height="5"></rect><circle fill="var(--colorFg)" cx="47.5" cy="60" r="5"></circle><circle fill="var(--colorLi)" cx="62.5" cy="60" r="5"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" class="themebox-o_mark" viewBox="0 0 16 16"><circle cx="8" cy="8" r="4"></circle></svg></div><div class="themebox-title"></div>';
+            document.getElementById('themeMachine').insertBefore(btn, document.querySelector('.editTheme'));
+            const ses = document.querySelector('#' + name + ' .themebox-image');
+            for (const [key, value] of Object.entries(theme)) {
+                if (key !== 'themeName') {
+                    ses.style.setProperty('--' + key, value);
+                }
+            }
+            const themeBox = document.querySelector('#' + name + ' .themebox-title');
+            themeBox.title = '.' + name;
+            themeBox.innerText = name.substring(4).replace(/_/g, ' ');
+        });
         //setup
         toggleEdit.style.display = 'none';
         toggleEdit.style.opacity = 1;
-        editBtn.disabled = true;
-        saveBtn.disabled = true;
-        importBtn.disabled = true;
-        exportBtn.disabled = true;
-        //custom1
-        document.getElementById('c1Name').innerText = c1Name;
-        document.body.style.setProperty('--c1Bg', c1Bg);
-        document.body.style.setProperty('--c1Fg', c1Fg);
-        document.body.style.setProperty('--c1Hi', c1Hi);
-        document.body.style.setProperty('--c1Btn', c1Btn);
-        document.body.style.setProperty('--c1Drop', c1Drop);
-        document.body.style.setProperty('--c1Li', c1Li);
-        document.body.style.setProperty('--c1Li2', c1Li2);
-        //custom2
-        document.getElementById('c2Name').innerText = c2Name;
-        document.body.style.setProperty('--c2Bg', c2Bg);
-        document.body.style.setProperty('--c2Fg', c2Fg);
-        document.body.style.setProperty('--c2Hi', c2Hi);
-        document.body.style.setProperty('--c2Btn', c2Btn);
-        document.body.style.setProperty('--c2Drop', c2Drop);
-        document.body.style.setProperty('--c2Li', c2Li);
-        document.body.style.setProperty('--c2Li2', c2Li2);
-        //custom3
-        document.getElementById('c3Name').innerText = c3Name;
-        document.body.style.setProperty('--c3Bg', c3Bg);
-        document.body.style.setProperty('--c3Fg', c3Fg);
-        document.body.style.setProperty('--c3Hi', c3Hi);
-        document.body.style.setProperty('--c3Btn', c3Btn);
-        document.body.style.setProperty('--c3Drop', c3Drop);
-        document.body.style.setProperty('--c3Li', c3Li);
-        document.body.style.setProperty('--c3Li2', c3Li2);
-        //custom4
-        document.getElementById('c4Name').innerText = c4Name;
-        document.body.style.setProperty('--c4Bg', c4Bg);
-        document.body.style.setProperty('--c4Fg', c4Fg);
-        document.body.style.setProperty('--c4Hi', c4Hi);
-        document.body.style.setProperty('--c4Btn', c4Btn);
-        document.body.style.setProperty('--c4Drop', c4Drop);
-        document.body.style.setProperty('--c4Li', c4Li);
-        document.body.style.setProperty('--c4Li2', c4Li2);
-        //selected theme
-        if (restore.darkGrey === '1') {
-            document.getElementById('darkGrey').classList.add('active');
-        }
-        else if (restore.lightGrey === '1') {
-            document.getElementById('lightGrey').classList.add('active');
-        }
-        else if (restore.mod === '1') {
-            document.getElementById('mod').classList.add('active');
-        }
-        else if (restore.sprucey === '1') {
-            document.getElementById('sprucey').classList.add('active');
-        }
-        else if (restore.custom1 === '1') {
-            document.getElementById('custom1').classList.add('active');
+        const select = vct.selected;
+        document.getElementById(select).classList.add('active');
+        if (select.startsWith('vfm_')) {
+            addTheme.disabled = false;
+            removeTheme.disabled = false;
             editBtn.disabled = false;
-            exportBtn.disabled = false;
-            importBtn.disabled = false;
-            _themeName.value = c1Name;
-            _colorBg.value = c1Bg;
-            _colorFg.value = c1Fg;
-            _colorHi.value = c1Hi;
-            _colorBtn.value = c1Btn;
-            _colorDrop.value = c1Drop;
-            _colorLi.value = c1Li;
-            _colorLi2.value = c1Li2;
-        }
-        else if (restore.custom2 === '1') {
-            document.getElementById('custom2').classList.add('active');
-            editBtn.disabled = false;
-            exportBtn.disabled = false;
-            importBtn.disabled = false;
-            _themeName.value = c2Name;
-            _colorBg.value = c2Bg;
-            _colorFg.value = c2Fg;
-            _colorHi.value = c2Hi;
-            _colorBtn.value = c2Btn;
-            _colorDrop.value = c2Drop;
-            _colorLi.value = c2Li;
-            _colorLi2.value = c2Li2;
-        }
-        else if (restore.custom3 === '1') {
-            document.getElementById('custom3').classList.add('active');
-            editBtn.disabled = false;
-            exportBtn.disabled = false;
-            importBtn.disabled = false;
-            _themeName.value = c3Name;
-            _colorBg.value = c3Bg;
-            _colorFg.value = c3Fg;
-            _colorHi.value = c3Hi;
-            _colorBtn.value = c3Btn;
-            _colorDrop.value = c3Drop;
-            _colorLi.value = c3Li;
-            _colorLi2.value = c3Li2;
-        }
-        else if (restore.custom4 === '1') {
-            document.getElementById('custom4').classList.add('active');
-            editBtn.disabled = false;
-            exportBtn.disabled = false;
-            importBtn.disabled = false;
-            _themeName.value = c4Name;
-            _colorBg.value = c4Bg;
-            _colorFg.value = c4Fg;
-            _colorHi.value = c4Hi;
-            _colorBtn.value = c4Btn;
-            _colorDrop.value = c4Drop;
-            _colorLi.value = c4Li;
-            _colorLi2.value = c4Li2;
+            moveLeft.disabled = false;
+            moveRight.disabled = false;
+            var index = vt.findIndex(x => x.themeName === select);
+            _themeName.value = vt[index].themeName.substring(4).replace(/_/g, ' ');
+            _colorBg.value = vt[index].colorBg;
+            _colorFg.value = vt[index].colorFg;
+            _colorHi.value = vt[index].colorHi;
+            _colorCo.value = vt[index].colorCo;
+            _colorDd.value = vt[index].colorDd;
+            _colorLi.value = vt[index].colorLi;
+            _colorAc.value = vt[index].colorAc;
         }
         else {
-            document.getElementById('standard').classList.add('active');
+            addTheme.disabled = true;
+            removeTheme.disabled = true;
+            editBtn.disabled = true;
+            moveLeft.disabled = true;
+            moveRight.disabled = true;
         }
+        document.querySelectorAll('button.themebox').forEach(function(item) {
+            item.addEventListener('click', _selectTheme);
+        });
     });
-}
+};
 
 
 /* Select Theme */
@@ -346,88 +67,163 @@ function _selectTheme(event) {
     const name = theme.getAttribute('id');
     if (!theme.classList.contains('active')) {
         _cancelImport();
-        const current = document.querySelector('.active')
-        const currentName = current.getAttribute('id');
-        current.classList.remove('active');
+        const old = document.querySelector('.active');
+        old.classList.remove('active');
         theme.classList.add('active');
-        if (name !== 'custom1' && name !== 'custom2' && name !== 'custom3' && name !== 'custom4') {
-            chrome.storage.sync.set({
-                [currentName]: '0',
-                [name]: '1',
-                'custom': '0'
-            });
-            toggleEdit.style.display = 'none';
-            editBtn.disabled = true;
-            saveBtn.disabled = true;
-            importBtn.disabled = true;
-            exportBtn.disabled = true;
-        }
-        else {
-            chrome.storage.sync.set({
-                [currentName]: '0',
-                [name]: '1',
-                'custom': '1'
-            });
-            editBtn.disabled = false;
-            exportBtn.disabled = false;
-            importBtn.disabled = false;
-            if (name === 'custom1') {
-                _themeName.value = c1Name;
-                _colorBg.value = c1Bg;
-                _colorFg.value = c1Fg;
-                _colorHi.value = c1Hi;
-                _colorBtn.value = c1Btn;
-                _colorDrop.value = c1Drop;
-                _colorLi.value = c1Li;
-                _colorLi2.value = c1Li2;
-            }
-            else if (name === 'custom2') {
-                _themeName.value = c2Name;
-                _colorBg.value = c2Bg;
-                _colorFg.value = c2Fg;
-                _colorHi.value = c2Hi;
-                _colorBtn.value = c2Btn;
-                _colorDrop.value = c2Drop;
-                _colorLi.value = c2Li;
-                _colorLi2.value = c2Li2;
-            }
-            else if (name === 'custom3') {
-                _themeName.value = c3Name;
-                _colorBg.value = c3Bg;
-                _colorFg.value = c3Fg;
-                _colorHi.value = c3Hi;
-                _colorBtn.value = c3Btn;
-                _colorDrop.value = c3Drop;
-                _colorLi.value = c3Li;
-                _colorLi2.value = c3Li2;
+        chrome.storage.sync.get({
+            'VFM_CURRENT_THEME': '',
+            'VFM_THEMES': ''
+        }, function(get) {
+            var vct = get.VFM_CURRENT_THEME;
+            vct.selected = name;
+            if (!name.startsWith('vfm_')) {
+                chrome.storage.sync.set({'VFM_CURRENT_THEME': vct});
+                toggleEdit.style.display = 'none';
+                addTheme.disabled = true;
+                removeTheme.disabled = true;
+                editBtn.disabled = true;
+                moveLeft.disabled = true;
+                moveRight.disabled = true;
+                sendToBackground();
             }
             else {
-                _themeName.value = c4Name;
-                _colorBg.value = c4Bg;
-                _colorFg.value = c4Fg;
-                _colorHi.value = c4Hi;
-                _colorBtn.value = c4Btn;
-                _colorDrop.value = c4Drop;
-                _colorLi.value = c4Li;
-                _colorLi2.value = c4Li2;
+                var vt = get.VFM_THEMES;
+                var index = vt.findIndex(x => x.themeName === name);
+                _themeName.value = vt[index].themeName.substring(4).replace(/_/g, ' ');
+                _colorBg.value = vt[index].colorBg;
+                _colorFg.value = vt[index].colorFg;
+                _colorHi.value = vt[index].colorHi;
+                _colorCo.value = vt[index].colorCo;
+                _colorDd.value = vt[index].colorDd;
+                _colorLi.value = vt[index].colorLi;
+                _colorAc.value = vt[index].colorAc;
+                chrome.storage.sync.set({'VFM_CURRENT_THEME': vct}, function() {
+                    addTheme.disabled = false;
+                    removeTheme.disabled = false;
+                    editBtn.disabled = false;
+                    moveLeft.disabled = false;
+                    moveRight.disabled = false;
+                    sendToBackground();
+                });
             }
-            _activateTheme();
-        }
+        });
     }
 };
 
 
-/* Toggle Edit */
+// Add Theme
 
-function _editTheme() {
-    if (toggleEdit.style.display === 'none') {
-        toggleEdit.style.display = 'block';
-        saveBtn.disabled = false;
-    }
-    else {
-        toggleEdit.style.display = 'none';
-        saveBtn.disabled = true;
-    }
+function _addTheme() {
+    chrome.storage.sync.get({
+        'VFM_THEMES': '',
+        'VFM_CURRENT_THEME': ''
+    }, function(get) {
+        var vt = get.VFM_THEMES;
+        var vct = get.VFM_CURRENT_THEME;
+        const epoch = 'vfm_' + Date.now();
+        vt.push({'themeName': epoch, 'colorBg': vct.colors.colorBg, 'colorFg': vct.colors.colorFg, 'colorHi': vct.colors.colorHi, 'colorCo': vct.colors.colorCo, 'colorDd': vct.colors.colorDd, 'colorLi': vct.colors.colorLi, 'colorAc': vct.colors.colorAc});
+        chrome.storage.sync.set({'VFM_THEMES': vt}, function() {
+            const btn = document.createElement('button');
+            btn.id = epoch;
+            btn.classList.add('themebox');
+            btn.innerHTML = '<div class="themebox-image"><svg xmlns="http://www.w3.org/2000/svg" width="110" height="76" viewBox="0 0 110 76"><rect fill="var(--colorBg)" x="0" y="0" width="110" height="76"></rect><rect fill="var(--colorAc)" x="0" y="14" width="110" height="12"></rect><rect fill="var(--colorDd)" x="85" y="26" width="25" height="50"></rect><rect fill="var(--colorCo)" x="6" y="32" width="15" height="5"></rect><rect fill="var(--colorHi)" x="23" y="32" width="15" height="5"></rect><circle fill="var(--colorFg)" cx="47.5" cy="60" r="5"></circle><circle fill="var(--colorLi)" cx="62.5" cy="60" r="5"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" class="themebox-o_mark" viewBox="0 0 16 16"><circle cx="8" cy="8" r="4"></circle></svg></div><div class="themebox-title"></div>';
+            document.getElementById('themeMachine').insertBefore(btn, document.querySelector('.editTheme'));
+            const newTheme = document.getElementById(epoch);
+            newTheme.addEventListener('click', _selectTheme);
+            const ses = document.querySelector('#' + epoch + ' .themebox-image');
+            for (const [key, value] of Object.entries(vt[vt.length-1])) {
+                if (key !== 'themeName') {
+                    ses.style.setProperty('--' + key, value);
+                }
+            }
+            const themeBox = document.querySelector('#' + epoch + ' .themebox-title');
+            themeBox.title = '.' + epoch;
+            themeBox.innerText = epoch.substring(4).replace(/_/g, ' ');
+            newTheme.click();
+            toggleEdit.style.display = 'block';
+            _themeName.focus();
+            _restoreSchedule();
+        })
+    })
+}
+
+
+// Remove Theme
+
+function _removeTheme() {
+    chrome.storage.sync.get({
+        'VFM_THEMES': '',
+        'VFM_CURRENT_THEME': '',
+        'VFM_SCHEDULE': ''
+    }, function(get) {
+        let vt = get.VFM_THEMES;
+        let vct = get.VFM_CURRENT_THEME;
+        let sc = get.VFM_SCHEDULE;
+        if (vt.length > 1) {
+            sc.schedule.forEach(item => {
+                if (item.theme === vct.selected) {
+                    item.theme = 'vfm-standard';
+                }
+            })
+            const index = vt.findIndex(x => x.themeName === vct.selected);
+            if (index > 0) {
+                var newSelect = vt[index-1].themeName;
+            }
+            else {
+                var newSelect = vt[index+1].themeName;
+            }
+            document.getElementById(newSelect).click();
+            const remove = document.getElementById(vt[index].themeName);
+            remove.removeEventListener('click', _selectTheme);
+            remove.parentNode.removeChild(remove);
+            vt.splice(index, 1);
+            chrome.storage.sync.set({
+                'VFM_THEMES': vt,
+                'VFM_SCHEDULE': sc
+            }, () => _restoreSchedule());
+        }
+    })
+}
+
+
+/* Move Theme */
+
+function _moveTheme() {
+    chrome.storage.sync.get({
+        'VFM_THEMES': '',
+        'VFM_CURRENT_THEME': ''
+    }, function(get) {
+        var vt = get.VFM_THEMES;
+        var vct = get.VFM_CURRENT_THEME;
+        var index = vt.findIndex(x => x.themeName === vct.selected);
+        if (_toMove === 'left') {
+            if (index !== 0) {
+                var moveThis = document.getElementById(vct.selected);
+                moveThis.parentNode.insertBefore(moveThis, document.getElementById(vt[index-1].themeName));
+                var fromI = vt[index];
+                var toI = vt[index-1];
+                vt[index-1] = fromI;
+                vt[index] = toI;
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            if (index < vt.length - 1) {
+                var moveThis = document.getElementById(vt[index+1].themeName);
+                moveThis.parentNode.insertBefore(moveThis, document.getElementById(vct.selected));
+                var fromI = vt[index];
+                var toI = vt[index+1];
+                vt[index+1] = fromI;
+                vt[index] = toI;
+            }
+            else {
+                return;
+            }
+        }
+        chrome.storage.sync.set({'VFM_THEMES': vt});
+    });
 };
 
 
@@ -436,71 +232,79 @@ function _editTheme() {
 function _saveTheme() {
     _safeValueSwitch = 0;
     _cancelImport();
-    const active = document.querySelector('.active');
-    const newTheme = active.getAttribute('id');
-    if (_themeName.value === '') {
-        _themeName.value = _tolocalISO();
-    }
-    if (newTheme === 'custom1') {
+    chrome.storage.sync.get({
+        'VFM_THEMES': '',
+        'VFM_CURRENT_THEME': '',
+        'VFM_SCHEDULE': ''
+    }, function(get) {
+        let vt = get.VFM_THEMES;
+        let vct = get.VFM_CURRENT_THEME;
+        let sc = get.VFM_SCHEDULE;
+        var dupe = false;
+        const active = document.querySelector('.active')
+        const update = active.getAttribute('id');
+        var nameCheck =  /^[a-zA-Z0-9- ]*$/.test(_themeName.value);
+        var name = _themeName.value.replace(/ /g,'_').trim();
+        for (i=0; i<vt.length; i++) {
+            if (name.toLowerCase() === vt[i].themeName.substring(4).toLowerCase() && name.toLowerCase() !== vct.selected.substring(4).toLowerCase()) {
+                dupe = true;
+                break;
+            }
+        }
+        if (nameCheck === true && name.length > 0 && name.length < 26 && dupe === false) {
+            var trueName = 'vfm_' + name;
+            var displayName = name.replace(/_/g,' ');
+        }
+        else {
+            var epoch = Date.now();
+            var trueName = 'vfm_' + epoch;
+            var displayName = epoch;
+            _themeName.value = epoch;
+        }
+        var index = vt.findIndex(x => x.themeName === update);
+        vt[index].themeName = trueName;
+        vt[index].colorBg = _colorBg.value;
+        vt[index].colorFg = _colorFg.value;
+        vt[index].colorHi = _colorHi.value;
+        vt[index].colorCo = _colorCo.value;
+        vt[index].colorDd = _colorDd.value;
+        vt[index].colorLi = _colorLi.value;
+        vt[index].colorAc = _colorAc.value;
+        active.id = trueName;
+        const ses = document.querySelector('.active .themebox-image');
+        for (const [key, value] of Object.entries(vt[index])) {
+            if (key !== 'themeName') {
+                ses.style.setProperty('--' + key, value);
+            }
+        }
+        const themeBox = document.querySelector('.active .themebox-title');
+        themeBox.title = '.' + trueName;
+        themeBox.innerText = displayName;
+        sc.schedule.forEach(item => {
+            if (item.theme === vct.selected) {
+                item.theme = trueName;
+            }
+        })
+        vct.selected = trueName;
         chrome.storage.sync.set({
-            'c1Name': _themeName.value,
-            'c1Bg': _colorBg.value,
-            'c1Fg': _colorFg.value,
-            'c1Hi': _colorHi.value,
-            'c1Btn': _colorBtn.value,
-            'c1Drop': _colorDrop.value,
-            'c1Li': _colorLi.value,
-            'c1Li2': _colorLi2.value
+            'VFM_THEMES': vt,
+            'VFM_CURRENT_THEME': vct,
+            'VFM_SCHEDULE': sc
+        }, function() {
+            sendToBackground();
+            _restoreSchedule();
+            status.style.opacity = '0';
+            status.innerText = chrome.i18n.getMessage('saveTheme');
+            _fade();
         });
-    }
-    if (newTheme === 'custom2') {
-        chrome.storage.sync.set({
-            'c2Name': _themeName.value,
-            'c2Bg': _colorBg.value,
-            'c2Fg': _colorFg.value,
-            'c2Hi': _colorHi.value,
-            'c2Btn': _colorBtn.value,
-            'c2Drop': _colorDrop.value,
-            'c2Li': _colorLi.value,
-            'c2Li2': _colorLi2.value
-        });
-    }
-    if (newTheme === 'custom3') {
-        chrome.storage.sync.set({
-            'c3Name': _themeName.value,
-            'c3Bg': _colorBg.value,
-            'c3Fg': _colorFg.value,
-            'c3Hi': _colorHi.value,
-            'c3Btn': _colorBtn.value,
-            'c3Drop': _colorDrop.value,
-            'c3Li': _colorLi.value,
-            'c3Li2': _colorLi2.value
-        });
-    }
-    if (newTheme === 'custom4') {
-        chrome.storage.sync.set({
-            'c4Name': _themeName.value,
-            'c4Bg': _colorBg.value,
-            'c4Fg': _colorFg.value,
-            'c4Hi': _colorHi.value,
-            'c4Btn': _colorBtn.value,
-            'c4Drop': _colorDrop.value,
-            'c4Li': _colorLi.value,
-            'c4Li2': _colorLi2.value
-        });
-    }
-    _restoreThemes();
-    _activateTheme();
-    status.style.opacity = '0';
-    status.innerText = chrome.i18n.getMessage('saveTheme');
-    _fade();
+    });
 };
 
 
 /* Export Theme */
 
 function _exportTheme() {
-    const share = {'themeName': _themeName.value, 'colorBg': _colorBg.value, 'colorFg': _colorFg.value, 'colorHi': _colorHi.value, 'colorBtn': _colorBtn.value, 'colorDrop': _colorDrop.value, 'colorLi': _colorLi.value, 'colorLi2': colorLi2.value};
+    const share = {'themeName': _themeName.value, 'colorBg': _colorBg.value, 'colorFg': _colorFg.value, 'colorHi': _colorHi.value, 'colorAc': _colorAc.value, 'colorLi': _colorLi.value, 'colorCo': _colorCo.value, 'colorDd': _colorDd.value};
     const themeCode = JSON.stringify(share);
     navigator.clipboard.writeText(themeCode);
     status.style.opacity = '0';
@@ -522,18 +326,14 @@ function _cancelImport(){
             _colorBg.value = _safeBg;
             _colorFg.value = _safeFg;
             _colorHi.value = _safeHi;
-            _colorBtn.value = _safeBtn;
-            _colorDrop.value = _safeDrop;
+            _colorCo.value = _safeCo;
+            _colorDd.value = _safeDd;
             _colorLi.value = _safeLi;
-            _colorLi2.value = _safeLi2;
+            _colorAc.value = _safeAc;
         }
         _themeName.placeholder = '';
-        _themeName.setAttribute('maxlength','30');
-        if (toggleEdit.style.display === 'block') {
-            toggleEdit.style.display = 'none';
-        }
-        editBtn.disabled = false;
-        saveBtn.disabled = true;
+        _themeName.setAttribute('maxlength','25');
+        saveBtn.disabled = false;
         exportBtn.disabled = false;
         status.style.opacity = '0';
         status.innerText = chrome.i18n.getMessage('cancelImport');
@@ -545,28 +345,26 @@ function _imp() {
     event.stopPropagation();
     event.preventDefault();
     if (eventType === 'paste') {
-        var clipboardData = event.clipboardData || window.clipboardData;
+        const clipboardData = event.clipboardData || window.clipboardData;
         var themeCode = clipboardData.getData('text');
     }
     else {
         var themeCode = event.dataTransfer.getData('text');
     }
-    var shared = JSON.parse(themeCode);
+    const shared = JSON.parse(themeCode);
     _themeName.value = shared.themeName;
     if (_themeName.value === 'undefined') {
-        _themeName.value = _tolocalISO();
+        _themeName.value = Date.now();
     }
     _colorBg.value = shared.colorBg;
     _colorFg.value = shared.colorFg;
     _colorHi.value = shared.colorHi;
-    _colorBtn.value = shared.colorBtn;
-    _colorDrop.value = shared.colorDrop;
+    _colorCo.value = shared.colorCo;
+    _colorDd.value = shared.colorDd;
     _colorLi.value = shared.colorLi;
-    _colorLi2.value = shared.colorLi2;
+    _colorAc.value = shared.colorAc;
     _themeName.classList.remove('import');
     _themeName.placeholder = '';
-    _themeName.setAttribute('maxlength','30');
-    editBtn.disabled = true;
     saveBtn.disabled = false;
     exportBtn.disabled = true;
     importBtn.disabled = false;
@@ -585,20 +383,18 @@ function _importTheme() {
         _safeBg = _colorBg.value;
         _safeFg = _colorFg.value;
         _safeHi = _colorHi.value;
-        _safeBtn = _colorBtn.value;
-        _safeDrop = _colorDrop.value;
+        _safeCo = _colorCo.value;
+        _safeDd = _colorDd.value;
         _safeLi = _colorLi.value;
-        _safeLi2 = _colorLi2.value;
+        _safeAc = _colorAc.value;
         _themeName.value = '';
         _themeName.placeholder = chrome.i18n.getMessage('import');
-        _themeName.setAttribute('maxlength','350');
         status.style.opacity = '0';
         status.innerText = chrome.i18n.getMessage('importThemeDesc');
         _fade();
         if (toggleEdit.style.display === 'none') {
             toggleEdit.style.display = 'block';
         }
-        editBtn.disabled = true;
         saveBtn.disabled = true;
         exportBtn.disabled = true;
         _themeName.focus();
@@ -617,15 +413,15 @@ function _importTheme() {
 };
 
 
-/* Date */
+/* Toggle Edit */
 
-function _tolocalISO() {
-    var date = new Date();
-    function pad(n) { return n < 10 ? '0' + n : n }
-    var localISO = date.getFullYear() + '-'
-        + pad(date.getMonth() + 1) + '-'
-        + pad(date.getDate())
-    return localISO;
+function _editTheme() {
+    if (toggleEdit.style.display === 'none') {
+        toggleEdit.style.display = 'block';
+    }
+    else {
+        toggleEdit.style.display = 'none';
+    }
 };
 
 
@@ -644,7 +440,17 @@ function _fade() {
 };
 
 
+/* Activate Theme */
+
+function sendToBackground() {
+    chrome.runtime.sendMessage({message: 'trigger theme'});
+};
+
+const addTheme = document.getElementById('addTheme');
+const removeTheme = document.getElementById('removeTheme');
 const editBtn = document.querySelector('.theme-edit');
+const moveLeft = document.getElementById('moveLeft');
+const moveRight = document.getElementById('moveRight');
 const saveBtn = document.querySelector('.theme-save');
 const importBtn = document.querySelector('.theme-import');
 const exportBtn = document.querySelector('.theme-export');
@@ -653,16 +459,34 @@ const _themeName = document.getElementById('themeName');
 const _colorBg = document.getElementById('colorBg');
 const _colorFg = document.getElementById('colorFg');
 const _colorHi = document.getElementById('colorHi');
-const _colorBtn = document.getElementById('colorBtn');
-const _colorDrop = document.getElementById('colorDrop');
+const _colorAc = document.getElementById('colorAc');
 const _colorLi = document.getElementById('colorLi');
-const _colorLi2 = document.getElementById('colorLi2');
+const _colorCo = document.getElementById('colorCo');
+const _colorDd = document.getElementById('colorDd');
 const status = document.getElementById('status');
 
-document.querySelectorAll('button.themebox').forEach(function(theme) {
-    theme.addEventListener('click', _selectTheme);
-});
+addTheme.addEventListener('click', _addTheme);
+removeTheme.addEventListener('click', _removeTheme);
 editBtn.addEventListener('click', _editTheme);
+moveLeft.addEventListener('click', function() {
+    _toMove = 'left';
+    _moveTheme();
+});
+moveRight.addEventListener('click', function() {
+    _toMove = 'right';
+    _moveTheme();
+});
 saveBtn.addEventListener('click', _saveTheme);
-exportBtn.addEventListener('click', _exportTheme);
 importBtn.addEventListener('click', _importTheme);
+exportBtn.addEventListener('click', _exportTheme);
+
+chrome.runtime.onMessage.addListener(function(request) {
+    if (request.message === 'options update theme') {
+        const active = document.querySelector('#themeMachine .themebox.active').classList.remove('active');
+        const ct = document.querySelectorAll('#themeMachine button[id^="vfm_"]');
+        for (let i = 0; i < ct.length; i++) {
+            ct[i].parentNode.removeChild(ct[i]);
+        }
+        _restoreThemes();
+    }
+});
