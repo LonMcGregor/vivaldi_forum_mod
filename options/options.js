@@ -170,7 +170,7 @@ function _toggleSchedule() {
 
 function _restoreSchedule() {
     chrome.storage.sync.get({
-        'VFM_SCHEDULE': '',
+        'VFM_SCHEDULE': {schedule: {}},
         'VFM_THEMES': ''
     }, function(restore) {
         listSchedule.innerHTML = '';

@@ -34,6 +34,8 @@ function localisation() {
     document.getElementById('bookmarks').title = chrome.i18n.getMessage('navBookmarksDesc');
     document.getElementById('notificationIcons').innerText = chrome.i18n.getMessage('customNotification');
     document.getElementById('notificationIcons').title = chrome.i18n.getMessage('customNotificationDesc');
+    document.getElementById('systemEmoji').innerText = chrome.i18n.getMessage('systemEmoji');
+    document.getElementById('systemEmoji').title = chrome.i18n.getMessage('systemEmojiDesc');
     document.getElementById('userID').innerText = chrome.i18n.getMessage('showUID');
     document.getElementById('userID').title = chrome.i18n.getMessage('showUIDDesc');
     document.getElementById('signatureMod').innerText = chrome.i18n.getMessage('signatureMod');
@@ -45,7 +47,6 @@ function localisation() {
     document.getElementById('css-backup').innerText = chrome.i18n.getMessage('backup');
     document.getElementById('userCSS').placeholder = chrome.i18n.getMessage('userCSSDesc');
     document.getElementById('linkBugs').innerText = chrome.i18n.getMessage('linkBugs');
-    document.getElementById('undoMoji').innerText = chrome.i18n.getMessage('undoMoji');
     document.querySelector('#customemotes h2').innerText = chrome.i18n.getMessage('customEmoteTitle');
     document.getElementById('resetEmotes').innerText = chrome.i18n.getMessage('customEmoteReset');
     document.getElementById('loadEmotesFromTopic').innerText = chrome.i18n.getMessage('customEmoteTopic');
