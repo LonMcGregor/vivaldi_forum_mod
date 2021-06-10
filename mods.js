@@ -100,6 +100,7 @@ chrome.storage.sync.get ({
     if (mods.notificationIcons === true) loadFile('mods/notification-icons.css');
     if (mods.userID === true) loadFile('mods/userID.css');
     if (mods.square === true) loadFile('mods/square-avatars.css');
+    if (mods.signatureMod === true) loadFile('mods/signature-mod.css');
     if (mods.advancedFormatting === true) loadFile('mods/advanced-formatting.css');
     if (mods.bookmarks === true) _bookmarks();
     if (mods.headerScroll === true) {
@@ -110,25 +111,19 @@ chrome.storage.sync.get ({
         _subMenu = document.getElementById('submenu');
         window.addEventListener('scroll', autoScroll);
     }
-    if (mods.signatureMod === true) {
-        loadFile('mods/signature-mod.css');
-        _smod();
-    }
-    if (mods.systemEmoji === true) checkMoji();
     let startmods = mutations => {
         mutations.forEach(mutation => {
-            if (mutation.attributeName === 'class') {
+            if (mutations[0].addedNodes.length || mutations[0].removedNodes.length) {
                 add_copy_code();
-                checkMoji();
+                themePreview(content);
                 if (mods.signatureMod === true) _smod();
                 if (mods.systemEmoji === true) checkMoji();
             }
         })
     }
-    new MutationObserver(startmods).observe(document.getElementById('content'), {attributes: true});
+    new MutationObserver(startmods).observe(document.getElementById('body'), {childList: true, subtree: true});
 })
 
 logo();
 userMenu();
 discord();
-add_copy_code();

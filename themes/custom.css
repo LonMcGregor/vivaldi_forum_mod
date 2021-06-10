@@ -35,7 +35,7 @@ body, #panel {
 }
 #quick-search-container {
     background-color: var(--colorBg);
-    border: 1px solid var(--colorBgH);
+    border-color: var(--colorBgH);
 }
 .quick-search-container, .quick-search-results li a {
     color: var(--colorFg) !important;
@@ -50,9 +50,6 @@ body, #panel {
     background-color: var(--colorHi);
     color: var(--colorBg);
     border-color: var(--colorHi);
-}
-#logged-in-menu.nav.navbar-nav.navbar-right {
-    font-size: 15px;
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
     background-color: var(--colorBgL);
@@ -106,7 +103,7 @@ li .notif-dropdown-link a:hover {
     border-top-color: var(--colorDdH);
 }
 .header .chat-list>li:not(:last-child) {
-    border-bottom: 1px solid var(--colorDdL);
+    border-bottom-color: var(--colorDdL);
 }
 .dropdown-menu .divider {
     background-color: var(--colorDdM);
@@ -194,32 +191,32 @@ li .notif-dropdown-link a:hover {
     color: var(--colorLi);
 }
 html .topic .answered {
-    color: #4caf50;
+    color: var(--colorHi);
 }
 html .topic .unanswered {
-    color: #ff7518;
+    color: var(--colorCo);
 }
 .answered {
-    border: 1px solid #4caf50;
-    color: #4caf50;
+    border-color: var(--colorHi);
+    color: var(--colorHi);
 }
 .unanswered {
-    border: 1px solid #ff7518;
-    color: #ff7518;
+    border-color: var(--colorCo);
+    color: var(--colorCo);
 }
 .posts [component=post][data-index="-1"].isSolved {
-    border-left: 8px solid var(--colorCo);
-    border-top: 1px solid var(--colorCo);
-    border-right: 1px solid var(--colorCo) !important;
-    border-bottom: 1px solid var(--colorCo) !important;
+    border-left-color: var(--colorHi);
+    border-top-color: var(--colorHi);
+    border-right-color: var(--colorHi) !important;
+    border-bottom-color: var(--colorHi) !important;
 }
 .posts [component=post][data-index="-1"].isSolved:after {
-    color: var(--colorCo) !important;
+    color: var(--colorHi) !important;
 }
 .topic .posts .timeline-event .timeline-badge {
-    color: var(--colorCo);
+    color: var(--colorHi);
     background-color: var(--colorBg);
-    border-color: var(--colorCo);
+    border-color: var(--colorHi);
 }
 .posts-list .posts-list-item .topic-title, a, .breadcrumb a {
     color: var(--colorFg);
@@ -299,6 +296,9 @@ hr {
 .topic .posts>[component=post], .topic .timeline-event {
     border-bottom-color: var(--colorBgL) !important;
 }
+.topic .timeline-event+:not(.timeline-event):before, .topic .timeline-event:before {
+    border-bottom-color: var(--colorBg);
+  }
 small.pull-right a {
     color: var(--colorLi) !important;
 }
@@ -350,12 +350,12 @@ blockquote, .topic [component="post/parent"], .votes a {
     background-color: var(--colorBgM);
 }
 blockquote, .topic [component="post/replies"] {
-    border-left: 5px solid var(--colorBgH) !important;
+    border-left-color: var(--colorBgH) !important;
 }
 .topic .posts .content .toggle {
     background-color: var(--colorBgH);
     color: var(--colorFg);
-    border: 1px solid var(--colorBgH);
+    border-color: var(--colorBgH);
 }
 .categories>li:hover, .category>ul>li:hover {
     background-color: var(--colorBgD);
@@ -367,13 +367,10 @@ blockquote, .topic [component="post/replies"] {
     border-right-color: var(--colorLi);
 }
 .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
-    border: 1px solid var(--colorBgH) !important;
+    border-color: var(--colorBgH) !important;
 }
 .table>thead>tr>th {
     border-color: var(--colorBgM);
-}
-table {
-    border-collapse: separate;
 }
 .well, #inputAboutMe, #inputSignature {
     background-color: var(--colorBgL);
@@ -411,7 +408,7 @@ a[href="/tags/duplicate"] .tag, a[href="/tags/pipeline"] .tag, a[href="/tags/wil
     background-color: var(--colorBgM) !important;
 }
 .notifications-list li.unread:nth-child(odd), .notifications-list li.unread:nth-child(even) {
-    border-left: 5px solid var(--colorLi) !important;
+    border-left: 5px solid var(--colorHi) !important;
 }
 #content li[data-nid^="new_post"]::before, #content li[data-nid^="upvote"]::before, #content li[data-nid^="follow"]::before, #content li[data-nid^="move"]::before, #content li[data-nid^="chat"]::before, #content li[data-nid^="tid"]::before {
     color: unset !important;
@@ -435,7 +432,7 @@ a[href="/tags/duplicate"] .tag, a[href="/tags/pipeline"] .tag, a[href="/tags/wil
     background-color: var(--colorBgL);
 }
 .table-striped>tbody>tr:nth-of-type(even):hover {
-    background-color: var(--colorBg);
+    background-color: transparent;
 }
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     border-top-color: var(--colorBgM);
@@ -577,7 +574,7 @@ pre code {
 }
 /* logged out menu */
 a.btn-register, a.btn-login {
-    border: 1px solid transparent;
+    border-color: transparent;
     color: var(--colorFg);
 }
 a.btn-register:hover, a.btn-login:hover, a.btn-register:focus, a.btn-login:focus {
@@ -629,31 +626,30 @@ a.btn-register:hover, a.btn-login:hover, a.btn-register:focus, a.btn-login:focus
 .alert.alert-warning, .alert.alert-success, .alert.alert-info, .alert.alert-danger {
     background-color: var(--colorBgL);
     border-color: var(--colorBgL);
-    color: var(--colorFg);
 }
 .alert.alert-danger {
-    border-left: 5px solid #ef3939 !important;
+    color: var(--colorHi);
 }
 .alert.alert-warning {
-    border-left: 5px solid #ff7518 !important;
+    color: var(--colorCo);
 }
 .alert.alert-success {
-    border-left: 5px solid #4caf50 !important;
+    color: var(--colorCo);
 }
 .alert.alert-info {
-    border-left: 5px solid var(--colorFg) !important;
+    color: var(--colorFg);
 }
 .text-danger {
-    color: #ef3939;
+    color: var(--colorHi);
 }
 .text-warning {
-    color: #ff7518;
+    color: var(--colorCo);
 }
 .groups.details .text-warning {
     color: var(--colorHi);
 }
 .text-success {
-    color: #4caf50;
+    color: var(--colorCo);
 }
 
 /* Dialogs */
@@ -689,14 +685,14 @@ a.btn-register:hover, a.btn-login:hover, a.btn-register:focus, a.btn-login:focus
     background-color: var(--colorBgM);
 }
 .chats-list {
-    border-top: 1px solid transparent;
+    border-top-color: transparent;
 }
 .chats-list>li {
-    border-right: 1px solid transparent;
-    border-left: 1px solid transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
 }
 .chats-list>li, .chats-list>li.unread {
-    border-bottom: 1px solid var(--colorBgM);
+    border-bottom-color: var(--colorBgM);
 }
 .chat-modal .chat-content li.chat-message .chat-timestamp, .expanded-chat .chat-content li.chat-message .chat-timestamp {
     color: var(--colorFg2);
@@ -715,7 +711,7 @@ a.btn-register:hover, a.btn-login:hover, a.btn-register:focus, a.btn-login:focus
     text-shadow: none;
 }
 .chat-modal [component="chat/nav-wrapper"] .chat-search, .chats-full [component="chat/nav-wrapper"] .chat-search {
-    border-bottom: 1px solid var(--colorCo);
+    border-bottom-color: var(--colorCo);
 }
 .chat-search .form-control::-webkit-input-placeholder {
     color: var(--colorBg);
@@ -725,23 +721,23 @@ a.btn-register:hover, a.btn-login:hover, a.btn-register:focus, a.btn-login:focus
     border-color: var(--colorBgH);
 }
 .chat-modal [component="chat/nav-wrapper"] [component="chat/search/list"], .chats-full [component="chat/nav-wrapper"] [component="chat/search/list"] {
-    border-top: 1px solid var(--colorBgL) !important;
+    border-top-color: var(--colorBgL) !important;
 }
 .chat-modal [component="chat/nav-wrapper"] [component="chat/search/list"] li, .chats-full [component="chat/nav-wrapper"] [component="chat/search/list"] li {
     background-color: var(--colorBgL);
     color: var(--colorFg2);
-    border: 1px solid var(--colorBgM) !important;
-    border-bottom: 1px solid var(--colorBgM) !important;
+    border-color: var(--colorBgM) !important;
+    border-bottom-color: var(--colorBgM) !important;
 }
 .chat-modal .chat-content li.chat-message .message-body-wrapper:hover .message-body, .expanded-chat .chat-content li.chat-message .message-body-wrapper:hover .message-body {
-    background: var(--colorBgL);
+    background: var(--colorBgD);
 }
 .chat-modal .chat-content li.system-message, .expanded-chat .chat-content li.system-message {
     color: var(--colorFg2);
     opacity: 0.66;
 }
 .chat-modal .chat-content li.system-message::after, .chat-modal .chat-content li.system-message::before, .expanded-chat .chat-content li.system-message::after, .expanded-chat .chat-content li.system-message::before {
-    border-top: 1px solid var(--colorBgH);
+    border-top-color: var(--colorBgH);
 }
 ul[component="chat/search/list"].dropdown-menu {
     background-color: var(--colorBgL);
@@ -777,8 +773,8 @@ ul[component="chat/search/list"].dropdown-menu {
 }
 .composer .write {
     color: var(--colorFg);
-    background-color: var(--colorBgL);
-    border-color: var(--colorBgH);
+    background-color: var(--colorBgD);
+    border-color: var(--colorBgM);
     outline: none !important;
 }
 .composer textarea::-webkit-input-placeholder {
@@ -791,7 +787,7 @@ ul[component="chat/search/list"].dropdown-menu {
 }
 .composer .preview {
     background-color: var(--colorBg);
-    border-color: var(--colorBgH);
+    border-color: var(--colorBgM);
 }
 div.preview.well a {
     color: var(--colorLi);
@@ -800,7 +796,7 @@ div.preview.well a:hover, div.preview.well a:focus {
     color: var(--colorLi2);
 }
 .composer.resizable {
-    border-top: 1px solid var(--colorBgM);
+    border-top: 1px solid var(--colorBgL);
 }
 .composer .title-container {
     border-color: var(--colorBgM);
@@ -808,7 +804,7 @@ div.preview.well a:hover, div.preview.well a:focus {
 
 /* Forms */
 .form-control {
-    border: 1px solid var(--colorBgH);
+    border-color: var(--colorBgH);
 }
 .form-control::-webkit-input-placeholder, input::-webkit-input-placeholder {
     color: var(--colorFg2);
@@ -825,7 +821,7 @@ div.preview.well a:hover, div.preview.well a:focus {
 .bootstrap-tagsinput, .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
     background-color: var(--colorBg);
     color: var(--colorFg);
-    border: 1px solid var(--colorBgH);
+    border-color: var(--colorBgH);
 }
 [component="chat/search/list"] li {
     background-color: var(--colorBgL);
@@ -878,8 +874,8 @@ button.main.green, button.main.red {
 
 /* Unread avatar check */
 .category>ul>li .avatar .select .fa-check, .category>ul>li.selected .avatar .select .fa-check, .category>ul>li.selected .avatar .select:hover .fa-check {
-    background-color: var(--colorCo);
-    border-color: var(--colorCo) !important;
+    background-color: var(--colorHi);
+    border-color: var(--colorHi) !important;
     color: var(--colorBg) !important;
 }
 
@@ -957,7 +953,7 @@ span.votes .upvoted .fa-chevron-up::before {
 
 /* Emoji Picker */
 .emoji-dialog {
-    border: 1px solid var(--colorBgM);
+    border-color: var(--colorBgM);
 }
 .emoji-dialog .top-bar {
     background-color: var(--colorBgM);
@@ -965,7 +961,7 @@ span.votes .upvoted .fa-chevron-up::before {
 .emoji-tabs .emoji-dialog-search-container button.close {
     background-color: var(--colorCo);
     color: var(--colorBg);
-    border: 1px solid var(--colorCo2);
+    border-color: var(--colorCo2);
     text-shadow: none;
 }
 .emoji-tabs .emoji-dialog-search-container button.close:hover {
@@ -975,7 +971,7 @@ span.votes .upvoted .fa-chevron-up::before {
     background-color: var(--colorBg);
 }
 .nav-tabs>li>a:hover {
-    border: 1px solid var(--colorBgL);
+    border-color: var(--colorBgL);
 }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
     background-color: var(--colorBgM);

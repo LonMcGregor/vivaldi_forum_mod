@@ -13,8 +13,8 @@ function defaultSetup() {
             {'themeName': 'vfm_Tokyo_Night', 'colorBg': '#1a1b26','colorFg': '#a9b1d6', 'colorHi': '#ff9e64', 'colorAc': '#414868', 'colorLi': '#f7768e', 'colorCo': '#7aa2f7', 'colorDd': '#24283b'},
             {'themeName': 'vfm_PaperColor_Dark', 'colorBg': '#1c1c1c','colorFg': '#d0d0d0', 'colorHi': '#afd700', 'colorAc': '#5f8787', 'colorLi': '#00afaf', 'colorCo': '#ff5faf', 'colorDd': '#5f8787'},
             {'themeName': 'vfm_PaperColor_Light', 'colorBg': '#eeeeee','colorFg': '#444444', 'colorHi': '#d75f00', 'colorAc': '#005f87', 'colorLi': '#005faf', 'colorCo': '#d70087', 'colorDd': '#005f87'},
-            {'themeName': 'vfm_Rigel', 'colorBg': '#002635','colorFg': '#e6e6dc', 'colorHi': '#00cccc', 'colorAc': '#00384d', 'colorLi': '#1c8db2', 'colorCo': '#7eb2dd', 'colorDd': '#517f8d'},
-            {'themeName': 'vfm_Fireball', 'colorBg': '#4a525a','colorFg': '#dddddd', 'colorHi': '#a8ffd2', 'colorAc': '#bcc7d2', 'colorLi': '#ffa9c0', 'colorCo': '#1fd6ff', 'colorDd': '#415262'},
+            {'themeName': 'vfm_Rigel', 'colorBg': '#002635','colorFg': '#e6e6dc', 'colorHi': '#00cccc', 'colorAc': '#1c8db2', 'colorLi': '#1c8db2', 'colorCo': '#7eb2dd', 'colorDd': '#517f8d'},
+            {'themeName': 'vfm_Fireball', 'colorBg': '#4a525a','colorFg': '#dddddd', 'colorHi': '#a8ffd2', 'colorAc': '#bcc7d2', 'colorLi': '#ffa9c0', 'colorCo': '#1fd6ff', 'colorDd': '#ffa9c0'},
         ],
         'VFM_MODS': {
             'advancedFormatting': false,
@@ -23,7 +23,8 @@ function defaultSetup() {
             'notificationIcons': false,
             'userID': false,
             'signatureMod': false,
-            'square': false
+            'square': false,
+            'systemEmoji': false
         },
         'VFM_USER_CSS': false,
         'VFM_SCHEDULE': {
@@ -119,8 +120,8 @@ function activateTheme() {
             if (lumBg > 0.5) co.colorLi2 = shade(co.colorLi, 0.25);
             else co.colorLi2 = shade(co.colorLi, -0.12);
             // code
-            if (lumBg > 0.5) co.colorCo2 = shade(co.colorCo, 0.1);
-            else co.colorCo2 = shade(co.colorCo, -0.05);
+            if (lumBg > 0.5) co.colorCo2 = shade(co.colorCo, 0.25);
+            else co.colorCo2 = shade(co.colorCo, -0.12);
             // dropdown
             const rgbDd = RGB(co.colorDd);
             const lumDd = lum(rgbDd[0], rgbDd[1], rgbDd[2]);
@@ -141,10 +142,12 @@ function activateTheme() {
             // store custom theme
             chrome.storage.sync.set({'VFM_CURRENT_THEME': vct}, () => {
                 sendToTabs('update theme');
+                chrome.runtime.sendMessage({message: 'options apply theme'});
             })
         }
         else {
             sendToTabs('update theme');
+            chrome.runtime.sendMessage({message: 'options apply theme'});
         }
     })
 }
@@ -321,6 +324,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 chrome.storage.local.set({tabIDs: tabIDs});
             }
             sendResponse({message: 'akn'});
+            chrome.storage.sync.get({'VFM_SCHEDULE': ''}, get => {
+                if (get.VFM_SCHEDULE.activated === true) {
+                    chrome.alarms.get('themeChange', alarm => {
+                        setTimeout(() => {
+                            if (Date.now() > alarm.scheduledTime) setSchedule();
+                        }, 3000)
+                    })
+                }
+            })
         })
     }
     if (request.message === 'trigger theme') activateTheme();

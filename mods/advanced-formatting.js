@@ -63,21 +63,20 @@ let DRAG_START_POS = {x:0, y:0};
 */
 let SIMULATED_FORMAT_BUTTON;
 /* Definitions for new formatters
-* [keystring (as per fa-icons), start tag, end tag] */
+* [keystring (as per fa-icons), start tag, end tag, title, tag every selected line boolean, start at beginning of line boolean, initial tag] */
 const FORMATTERS = [
-    ["header", "# ", "", chrome.i18n.getMessage("header")],
+    ["header", "# ", "", chrome.i18n.getMessage("header"), true, true],
     ["window-minimize", "", `
 ***
 `, chrome.i18n.getMessage("horizontal_line")],
-    ["quote-right", "> ", "", chrome.i18n.getMessage("block_quote")],
-    ["file-code-o", "`", "`", chrome.i18n.getMessage("inline_code")],
+    ["quote-right", "> ", "", chrome.i18n.getMessage("block_quote"), true, true],
+    ["file-code-o", "`", "`", chrome.i18n.getMessage("inline_code"), true],
     ["th-large", `a | a
 ---|---
 x | x
 y | y
 `, "", chrome.i18n.getMessage("table")],
-    ["shield", `> Spoiler
->> `, "", chrome.i18n.getMessage("spoiler")],
+    ["shield", ">> ", "", chrome.i18n.getMessage("spoiler"), true, true, "> Spoiler"],
     ["list-ol", "1. ", "", chrome.i18n.getMessage("number_list")]
 ];
 /* default values - don't change these */
@@ -160,14 +159,53 @@ function get_random(length=4){
 
 /**
  * Add a before and after string to the selected part of the text area
- * @param beforeSelection the string to put at the start of selection
- * @param afterSelection the string to put at the end of selection
+ * @param {string} beforeSelection the string to put at the start of selection
+ * @param {string} afterSelection the string to put at the end of selection
+ * @param {boolean} tagEverySelectedLine for if beforeSelection and afterSelection are applied to each line of the selection
+ * @param {boolean} startAtBeginningOfLine for if beforeSelection is only applied to the start of a line regardless of selection
+ * @param {string} initialTag the string to put before start of selection
  */
-function writeToTextarea(beforeSelection, afterSelection){
+function writeToTextarea(beforeSelection, afterSelection, tagEverySelectedLine = false, startAtBeginningOfLine = false, initialTag = null){
     const textarea = document.querySelector("textarea");
-    const start = textarea.selectionStart;
+    let start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    let replacement = textarea.value.substring(0, start) + beforeSelection + textarea.value.substring(start, end) + afterSelection + textarea.value.substring(end);
+
+    if (startAtBeginningOfLine) {
+      let offset = 0;
+      do {
+        let newStart = textarea.value.lastIndexOf(`\n`, start - offset);
+        if (newStart === -1) {
+          start = 0;
+        } else if (newStart === 0) {
+          start = 0;
+          break;
+        } else {
+          start = newStart + 1;
+        }
+        offset++;
+      } while (start > end);
+    }
+
+    let changedText = "";
+    if (tagEverySelectedLine) {
+      const selectedText = textarea.value.substring(start, end);
+      if (initialTag) {
+        changedText += initialTag + "\n";
+      }
+      selectedText.split("\n").forEach((line, idx, array) => {
+        const lastLine = idx === array.length - 1;
+        if (lastLine) {
+          if (line !== "" || start === end) {
+            changedText += beforeSelection + line + afterSelection;
+          }
+        } else {
+          changedText += beforeSelection + line + afterSelection + "\n";
+        }
+      });
+    } else {
+      changedText = beforeSelection + textarea.value.substring(start, end) + afterSelection;
+    }
+    let replacement = textarea.value.substring(0, start) + changedText + textarea.value.substring(end);
     textarea.value = replacement;
     forceUpdatePreview(start + beforeSelection.length);
 }
@@ -449,12 +487,15 @@ function hookIntoEmotesButton(){
  * @param {string} openTag that appears before selection
  * @param {string} endTag that appears after selection
  * @param {string} title for button tooltip
+ * @param {boolean} tagEverySelectedLine should tags be applied to every selected line
+ * @param {boolean} startAtBeginningOfLine should open tags default to begining of line regardless of selection
+ * @param {string} initialTag that appears before selected lines
  * @returns {DOM} list item
  */
-function createSpecialFormattingbutton(buttonDisplayClass, openTag, endTag, title){
+function createSpecialFormattingbutton(buttonDisplayClass, openTag, endTag, title, tagEverySelectedLine = false, startAtBeginningOfLine = false, initialTag = null){
     const li = document.createElement("li");
     li.innerHTML = `<i class='fa fa-${buttonDisplayClass}'></i>`;
-    li.addEventListener("click", () => {writeToTextarea(openTag, endTag);});
+    li.addEventListener("click", () => {writeToTextarea(openTag, endTag, tagEverySelectedLine, startAtBeginningOfLine, initialTag);});
     li.title = title;
     li.setAttribute("tabindex", "-1");
     li.setAttribute("data-format", buttonDisplayClass);
@@ -482,7 +523,7 @@ function createJQueryClickSimulatorButton(){
 function addSpecialFormattingButtons(){
     const composerFormatters = document.querySelector(".composer .formatting-group");
     FORMATTERS.forEach(button => {
-        const madeButton = createSpecialFormattingbutton(button[0], button[1], button[2], button[3]);
+        const madeButton = createSpecialFormattingbutton(...button);
         composerFormatters.appendChild(madeButton);
     });
     SIMULATED_FORMAT_BUTTON = createJQueryClickSimulatorButton();

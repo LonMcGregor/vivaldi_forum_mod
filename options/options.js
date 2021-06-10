@@ -47,6 +47,26 @@ function _restore() {
 };
 
 
+/* Set page theme */
+
+function _loadTheme() {
+    chrome.storage.sync.get({'VFM_CURRENT_THEME': ''}, function(get) {
+        let theme = get.VFM_CURRENT_THEME.selected;
+        if (theme.startsWith('vfm_')) {
+            document.body.classList.remove('vfm-standard');
+            let colors = get.VFM_CURRENT_THEME.colors;
+            for (const [key, value] of Object.entries(colors)) {
+                document.body.style.setProperty('--' + key, value);
+            }
+        }
+        else {
+            document.body.removeAttribute('style');
+            document.body.classList.add('vfm-standard');
+        }
+    });
+}
+
+
 /* Save Modifications */
 
 function _selectMods(event) {
@@ -389,4 +409,20 @@ removeSchedule.addEventListener('click', function() {
 backupBtn.addEventListener('click', _backupUserCSS);
 resetBtn.addEventListener('click', _resetOptions);
 
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.message === 'options apply theme') {
+        _loadTheme();
+    }
+    if (request.message === 'options update theme') {
+        const active = document.querySelector('#themeMachine .themebox.active').classList.remove('active');
+        const ct = document.querySelectorAll('#themeMachine button[id^="vfm_"]');
+        for (let i = 0; i < ct.length; i++) {
+            ct[i].parentNode.removeChild(ct[i]);
+        }
+        _restoreThemes();
+        _restoreSchedule();
+    }
+});
+
+_loadTheme();
 _restore();
